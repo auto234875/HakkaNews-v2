@@ -4,7 +4,7 @@
 //
 //  Created by John Smith on 12/24/13.
 //  Copyright (c) 2013 John Smith. All rights reserved.
-//test
+//testing
 #import <UIKit/UIKit.h>
 @interface topStoriesViewController : UIViewController
 @property (nonatomic, strong) NSMutableArray *currentPosts;
