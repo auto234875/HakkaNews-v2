@@ -8,12 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		52EE4D5B1A2F9733004A6C09 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D5A1A2F9733004A6C09 /* main.m */; };
-		52EE4D5E1A2F9733004A6C09 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D5D1A2F9733004A6C09 /* AppDelegate.m */; };
-		52EE4D611A2F9733004A6C09 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D601A2F9733004A6C09 /* ViewController.m */; };
-		52EE4D641A2F9733004A6C09 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52EE4D621A2F9733004A6C09 /* Main.storyboard */; };
 		52EE4D661A2F9733004A6C09 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52EE4D651A2F9733004A6C09 /* Images.xcassets */; };
-		52EE4D691A2F9733004A6C09 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52EE4D671A2F9733004A6C09 /* LaunchScreen.xib */; };
 		52EE4D751A2F9733004A6C09 /* GuestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D741A2F9733004A6C09 /* GuestTests.m */; };
+		52EE4D801A2F97EF004A6C09 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D7E1A2F97EF004A6C09 /* AppDelegate.m */; };
+		52EE4D821A2F9C19004A6C09 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52EE4D811A2F9C19004A6C09 /* Social.framework */; };
+		52EE4D841A2F9C22004A6C09 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52EE4D831A2F9C22004A6C09 /* Security.framework */; };
+		52EE4D861A2F9C2B004A6C09 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52EE4D851A2F9C2B004A6C09 /* Foundation.framework */; };
+		52EE4D881A2F9C34004A6C09 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52EE4D871A2F9C34004A6C09 /* UIKit.framework */; };
+		52EE4D8A1A2F9C3F004A6C09 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52EE4D891A2F9C3F004A6C09 /* CoreGraphics.framework */; };
+		52EE4D8C1A2F9C49004A6C09 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52EE4D8B1A2F9C49004A6C09 /* SafariServices.framework */; };
+		52EE4D931A2F9C9E004A6C09 /* FoldingWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D8E1A2F9C9E004A6C09 /* FoldingWebView.m */; };
+		52EE4D941A2F9C9E004A6C09 /* FoldingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D901A2F9C9E004A6C09 /* FoldingTableView.m */; };
+		52EE4D951A2F9C9E004A6C09 /* FoldingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D911A2F9C9E004A6C09 /* FoldingView.m */; };
+		52EE4D981A2F9CF5004A6C09 /* DRPocketActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D961A2F9CF5004A6C09 /* DRPocketActivity.m */; };
+		52EE4D9B1A2F9CFF004A6C09 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D9A1A2F9CFF004A6C09 /* UIImage+ImageEffects.m */; };
+		52EE4D9E1A2F9D0D004A6C09 /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D9D1A2F9D0D004A6C09 /* LoginVC.m */; };
+		52EE4DA11A2F9D2E004A6C09 /* postCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D9F1A2F9D2E004A6C09 /* postCell.m */; };
+		52EE4DA41A2F9D36004A6C09 /* commentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4DA31A2F9D36004A6C09 /* commentCell.m */; };
+		52EE4DA71A2F9D4E004A6C09 /* replyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4DA61A2F9D4E004A6C09 /* replyVC.m */; };
+		52EE4DAA1A2F9D59004A6C09 /* submitVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4DA91A2F9D59004A6C09 /* submitVC.m */; };
+		52EE4DAD1A2F9D63004A6C09 /* CommentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4DAC1A2F9D63004A6C09 /* CommentsViewController.m */; };
+		52EE4DB01A2F9D6F004A6C09 /* topStoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4DAF1A2F9D6F004A6C09 /* topStoriesViewController.m */; };
+		52EE4DB21A2F9D85004A6C09 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52EE4DB11A2F9D85004A6C09 /* Launch Screen.xib */; };
+		91080AD610A205BA6C555DB3 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AF722BBFBA8AEF8AA89FE46 /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,19 +44,49 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A062B5F61AB0AC6DF2D73B2 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		52EE4D551A2F9733004A6C09 /* Guest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Guest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52EE4D591A2F9733004A6C09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		52EE4D5A1A2F9733004A6C09 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		52EE4D5C1A2F9733004A6C09 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		52EE4D5D1A2F9733004A6C09 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		52EE4D5F1A2F9733004A6C09 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		52EE4D601A2F9733004A6C09 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		52EE4D631A2F9733004A6C09 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		52EE4D651A2F9733004A6C09 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		52EE4D681A2F9733004A6C09 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		52EE4D6E1A2F9733004A6C09 /* GuestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GuestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		52EE4D731A2F9733004A6C09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		52EE4D741A2F9733004A6C09 /* GuestTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GuestTests.m; sourceTree = "<group>"; };
+		52EE4D7E1A2F97EF004A6C09 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		52EE4D7F1A2F97EF004A6C09 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		52EE4D811A2F9C19004A6C09 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		52EE4D831A2F9C22004A6C09 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		52EE4D851A2F9C2B004A6C09 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		52EE4D871A2F9C34004A6C09 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		52EE4D891A2F9C3F004A6C09 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		52EE4D8B1A2F9C49004A6C09 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
+		52EE4D8D1A2F9C9E004A6C09 /* FoldingWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FoldingWebView.h; sourceTree = "<group>"; };
+		52EE4D8E1A2F9C9E004A6C09 /* FoldingWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FoldingWebView.m; sourceTree = "<group>"; };
+		52EE4D8F1A2F9C9E004A6C09 /* FoldingTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FoldingTableView.h; sourceTree = "<group>"; };
+		52EE4D901A2F9C9E004A6C09 /* FoldingTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FoldingTableView.m; sourceTree = "<group>"; };
+		52EE4D911A2F9C9E004A6C09 /* FoldingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FoldingView.m; sourceTree = "<group>"; };
+		52EE4D921A2F9C9E004A6C09 /* FoldingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FoldingView.h; sourceTree = "<group>"; };
+		52EE4D961A2F9CF5004A6C09 /* DRPocketActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DRPocketActivity.m; sourceTree = "<group>"; };
+		52EE4D971A2F9CF5004A6C09 /* DRPocketActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DRPocketActivity.h; sourceTree = "<group>"; };
+		52EE4D991A2F9CFF004A6C09 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
+		52EE4D9A1A2F9CFF004A6C09 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
+		52EE4D9C1A2F9D0D004A6C09 /* LoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginVC.h; sourceTree = "<group>"; };
+		52EE4D9D1A2F9D0D004A6C09 /* LoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginVC.m; sourceTree = "<group>"; };
+		52EE4D9F1A2F9D2E004A6C09 /* postCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = postCell.m; sourceTree = "<group>"; };
+		52EE4DA01A2F9D2E004A6C09 /* postCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = postCell.h; sourceTree = "<group>"; };
+		52EE4DA21A2F9D36004A6C09 /* commentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = commentCell.h; sourceTree = "<group>"; };
+		52EE4DA31A2F9D36004A6C09 /* commentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = commentCell.m; sourceTree = "<group>"; };
+		52EE4DA51A2F9D4E004A6C09 /* replyVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = replyVC.h; sourceTree = "<group>"; };
+		52EE4DA61A2F9D4E004A6C09 /* replyVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = replyVC.m; sourceTree = "<group>"; };
+		52EE4DA81A2F9D59004A6C09 /* submitVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = submitVC.h; sourceTree = "<group>"; };
+		52EE4DA91A2F9D59004A6C09 /* submitVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = submitVC.m; sourceTree = "<group>"; };
+		52EE4DAB1A2F9D63004A6C09 /* CommentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentsViewController.h; sourceTree = "<group>"; };
+		52EE4DAC1A2F9D63004A6C09 /* CommentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentsViewController.m; sourceTree = "<group>"; };
+		52EE4DAE1A2F9D6F004A6C09 /* topStoriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = topStoriesViewController.h; sourceTree = "<group>"; };
+		52EE4DAF1A2F9D6F004A6C09 /* topStoriesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = topStoriesViewController.m; sourceTree = "<group>"; };
+		52EE4DB11A2F9D85004A6C09 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
+		6AF722BBFBA8AEF8AA89FE46 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1750BB692F55D8CBFF35F93 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +94,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52EE4D8C1A2F9C49004A6C09 /* SafariServices.framework in Frameworks */,
+				52EE4D8A1A2F9C3F004A6C09 /* CoreGraphics.framework in Frameworks */,
+				52EE4D881A2F9C34004A6C09 /* UIKit.framework in Frameworks */,
+				52EE4D861A2F9C2B004A6C09 /* Foundation.framework in Frameworks */,
+				52EE4D841A2F9C22004A6C09 /* Security.framework in Frameworks */,
+				52EE4D821A2F9C19004A6C09 /* Social.framework in Frameworks */,
+				91080AD610A205BA6C555DB3 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,12 +114,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A987F470C8663FC496A5125 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F1750BB692F55D8CBFF35F93 /* Pods.debug.xcconfig */,
+				1A062B5F61AB0AC6DF2D73B2 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		52EE4D4C1A2F9733004A6C09 = {
 			isa = PBXGroup;
 			children = (
 				52EE4D571A2F9733004A6C09 /* Guest */,
 				52EE4D711A2F9733004A6C09 /* GuestTests */,
 				52EE4D561A2F9733004A6C09 /* Products */,
+				1A987F470C8663FC496A5125 /* Pods */,
+				8B859BF773959A52042D5C45 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -81,13 +146,33 @@
 		52EE4D571A2F9733004A6C09 /* Guest */ = {
 			isa = PBXGroup;
 			children = (
-				52EE4D5C1A2F9733004A6C09 /* AppDelegate.h */,
-				52EE4D5D1A2F9733004A6C09 /* AppDelegate.m */,
-				52EE4D5F1A2F9733004A6C09 /* ViewController.h */,
-				52EE4D601A2F9733004A6C09 /* ViewController.m */,
-				52EE4D621A2F9733004A6C09 /* Main.storyboard */,
+				52EE4DAE1A2F9D6F004A6C09 /* topStoriesViewController.h */,
+				52EE4DAF1A2F9D6F004A6C09 /* topStoriesViewController.m */,
+				52EE4DAB1A2F9D63004A6C09 /* CommentsViewController.h */,
+				52EE4DAC1A2F9D63004A6C09 /* CommentsViewController.m */,
+				52EE4DA81A2F9D59004A6C09 /* submitVC.h */,
+				52EE4DA91A2F9D59004A6C09 /* submitVC.m */,
+				52EE4DA51A2F9D4E004A6C09 /* replyVC.h */,
+				52EE4DA61A2F9D4E004A6C09 /* replyVC.m */,
+				52EE4DA21A2F9D36004A6C09 /* commentCell.h */,
+				52EE4DA31A2F9D36004A6C09 /* commentCell.m */,
+				52EE4D9F1A2F9D2E004A6C09 /* postCell.m */,
+				52EE4DA01A2F9D2E004A6C09 /* postCell.h */,
+				52EE4D9C1A2F9D0D004A6C09 /* LoginVC.h */,
+				52EE4D9D1A2F9D0D004A6C09 /* LoginVC.m */,
+				52EE4D991A2F9CFF004A6C09 /* UIImage+ImageEffects.h */,
+				52EE4D9A1A2F9CFF004A6C09 /* UIImage+ImageEffects.m */,
+				52EE4D961A2F9CF5004A6C09 /* DRPocketActivity.m */,
+				52EE4D971A2F9CF5004A6C09 /* DRPocketActivity.h */,
+				52EE4D8D1A2F9C9E004A6C09 /* FoldingWebView.h */,
+				52EE4D8E1A2F9C9E004A6C09 /* FoldingWebView.m */,
+				52EE4D8F1A2F9C9E004A6C09 /* FoldingTableView.h */,
+				52EE4D901A2F9C9E004A6C09 /* FoldingTableView.m */,
+				52EE4D911A2F9C9E004A6C09 /* FoldingView.m */,
+				52EE4D921A2F9C9E004A6C09 /* FoldingView.h */,
+				52EE4D7E1A2F97EF004A6C09 /* AppDelegate.m */,
+				52EE4D7F1A2F97EF004A6C09 /* AppDelegate.h */,
 				52EE4D651A2F9733004A6C09 /* Images.xcassets */,
-				52EE4D671A2F9733004A6C09 /* LaunchScreen.xib */,
 				52EE4D581A2F9733004A6C09 /* Supporting Files */,
 			);
 			path = Guest;
@@ -96,6 +181,7 @@
 		52EE4D581A2F9733004A6C09 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				52EE4DB11A2F9D85004A6C09 /* Launch Screen.xib */,
 				52EE4D591A2F9733004A6C09 /* Info.plist */,
 				52EE4D5A1A2F9733004A6C09 /* main.m */,
 			);
@@ -119,6 +205,20 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		8B859BF773959A52042D5C45 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				52EE4D8B1A2F9C49004A6C09 /* SafariServices.framework */,
+				52EE4D891A2F9C3F004A6C09 /* CoreGraphics.framework */,
+				52EE4D871A2F9C34004A6C09 /* UIKit.framework */,
+				52EE4D851A2F9C2B004A6C09 /* Foundation.framework */,
+				52EE4D831A2F9C22004A6C09 /* Security.framework */,
+				52EE4D811A2F9C19004A6C09 /* Social.framework */,
+				6AF722BBFBA8AEF8AA89FE46 /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -126,9 +226,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 52EE4D781A2F9734004A6C09 /* Build configuration list for PBXNativeTarget "Guest" */;
 			buildPhases = (
+				19F140DF979C70749547FD43 /* Check Pods Manifest.lock */,
 				52EE4D511A2F9733004A6C09 /* Sources */,
 				52EE4D521A2F9733004A6C09 /* Frameworks */,
 				52EE4D531A2F9733004A6C09 /* Resources */,
+				D66ECD0FDA0CC9C54955C5A5 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -199,9 +301,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				52EE4D641A2F9733004A6C09 /* Main.storyboard in Resources */,
-				52EE4D691A2F9733004A6C09 /* LaunchScreen.xib in Resources */,
 				52EE4D661A2F9733004A6C09 /* Images.xcassets in Resources */,
+				52EE4DB21A2F9D85004A6C09 /* Launch Screen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -214,14 +315,58 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		19F140DF979C70749547FD43 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D66ECD0FDA0CC9C54955C5A5 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		52EE4D511A2F9733004A6C09 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				52EE4D611A2F9733004A6C09 /* ViewController.m in Sources */,
-				52EE4D5E1A2F9733004A6C09 /* AppDelegate.m in Sources */,
+				52EE4D801A2F97EF004A6C09 /* AppDelegate.m in Sources */,
+				52EE4DA71A2F9D4E004A6C09 /* replyVC.m in Sources */,
+				52EE4D931A2F9C9E004A6C09 /* FoldingWebView.m in Sources */,
+				52EE4DAD1A2F9D63004A6C09 /* CommentsViewController.m in Sources */,
+				52EE4D9B1A2F9CFF004A6C09 /* UIImage+ImageEffects.m in Sources */,
+				52EE4D951A2F9C9E004A6C09 /* FoldingView.m in Sources */,
 				52EE4D5B1A2F9733004A6C09 /* main.m in Sources */,
+				52EE4DAA1A2F9D59004A6C09 /* submitVC.m in Sources */,
+				52EE4DA11A2F9D2E004A6C09 /* postCell.m in Sources */,
+				52EE4D981A2F9CF5004A6C09 /* DRPocketActivity.m in Sources */,
+				52EE4D9E1A2F9D0D004A6C09 /* LoginVC.m in Sources */,
+				52EE4D941A2F9C9E004A6C09 /* FoldingTableView.m in Sources */,
+				52EE4DB01A2F9D6F004A6C09 /* topStoriesViewController.m in Sources */,
+				52EE4DA41A2F9D36004A6C09 /* commentCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,25 +387,6 @@
 			targetProxy = 52EE4D6F1A2F9733004A6C09 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		52EE4D621A2F9733004A6C09 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				52EE4D631A2F9733004A6C09 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		52EE4D671A2F9733004A6C09 /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				52EE4D681A2F9733004A6C09 /* Base */,
-			);
-			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		52EE4D761A2F9734004A6C09 /* Debug */ = {
@@ -341,6 +467,7 @@
 		};
 		52EE4D791A2F9734004A6C09 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F1750BB692F55D8CBFF35F93 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Guest/Info.plist;
@@ -351,6 +478,7 @@
 		};
 		52EE4D7A1A2F9734004A6C09 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1A062B5F61AB0AC6DF2D73B2 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Guest/Info.plist;
@@ -412,6 +540,7 @@
 				52EE4D7A1A2F9734004A6C09 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		52EE4D7B1A2F9734004A6C09 /* Build configuration list for PBXNativeTarget "GuestTests" */ = {
 			isa = XCConfigurationList;
@@ -420,6 +549,7 @@
 				52EE4D7D1A2F9734004A6C09 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

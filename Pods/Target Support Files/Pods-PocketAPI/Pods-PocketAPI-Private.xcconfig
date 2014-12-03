@@ -1,0 +1,5 @@
+#include "Pods-PocketAPI.xcconfig"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Build" "${PODS_ROOT}/Headers/Build/PocketAPI" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/Colours" "${PODS_ROOT}/Headers/Public/MCFireworksButton" "${PODS_ROOT}/Headers/Public/PocketAPI" "${PODS_ROOT}/Headers/Public/Shimmer" "${PODS_ROOT}/Headers/Public/TUSafariActivity" "${PODS_ROOT}/Headers/Public/libHN" "${PODS_ROOT}/Headers/Public/pop"
+OTHER_LDFLAGS = ${PODS_POCKETAPI_OTHER_LDFLAGS} -ObjC
+PODS_ROOT = ${SRCROOT}
