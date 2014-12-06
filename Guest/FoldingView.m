@@ -59,6 +59,7 @@ typedef NS_ENUM(NSInteger, LayerSection) {
         [self addSubview:_subclassView];
         [self addGestureRecognizers];
         _adjustRotationSpeed=YES;
+
     }
     return self;
 }
@@ -70,22 +71,19 @@ typedef NS_ENUM(NSInteger, LayerSection) {
 -(CATransformLayer*)scaleNTranslationLayer{
     if (!_scaleNTranslationLayer) {
         _scaleNTranslationLayer=[CATransformLayer layer];
-        _scaleNTranslationLayer.frame=self.subclassView.bounds;
-    }
-    if ([_scaleNTranslationLayer superlayer] != self.layer) {
-        [self.subclassView.layer addSublayer:_scaleNTranslationLayer];
+        _scaleNTranslationLayer.frame=self.bounds;
     }
     return _scaleNTranslationLayer;
 }
 
 - (void)updateBottomAndTopView {
-    [self updateContentSnapshot:self.subclassView afterScreenUpdate:YES];
+    [self updateContentSnapshot:self afterScreenUpdate:YES];
     [self addTopView];
     [self addBottomView];
 }
 - (void)updateContentSnapshot:(UIView *)view afterScreenUpdate:(BOOL)update
 {
-    UIGraphicsBeginImageContextWithOptions(view.bounds.size, YES,0);
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO,0);
     [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:update];
     self.image=UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -93,7 +91,7 @@ typedef NS_ENUM(NSInteger, LayerSection) {
 
 - (void)captureSuperViewScreenShot:(UIView *)view afterScreenUpdate:(BOOL)update
 {
-    UIGraphicsBeginImageContextWithOptions(view.bounds.size, YES,0);
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO,0);
     [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:update];
     self.superViewImage=UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -101,7 +99,7 @@ typedef NS_ENUM(NSInteger, LayerSection) {
 -(CALayer*)superViewLayer{
     if (!_superViewLayer) {
         _superViewLayer=[CALayer layer];
-        _superViewLayer.frame=self.subclassView.bounds;
+        _superViewLayer.frame=self.bounds;
     }
     return _superViewLayer;
 }
@@ -115,46 +113,51 @@ typedef NS_ENUM(NSInteger, LayerSection) {
 }
 - (void)addTopView
 {
-    [self.subclassView.layer addSublayer:self.superViewLayer];
+    [self.layer addSublayer:self.superViewLayer];
+   [self.layer addSublayer:self.scaleNTranslationLayer];
     self.topView=[CALayer layer];
-    self.topView.frame=CGRectMake(0.f,
-                                  0.f,
-                                  CGRectGetWidth(self.subclassView.bounds),
-                                  CGRectGetMidY(self.subclassView.bounds));
-    self.topView.backgroundColor=[UIColor whiteColor].CGColor;
     self.topView.opaque=YES;
-    self.topView.anchorPoint = CGPointMake(0.5, 1.0);
-    self.topView.position = CGPointMake(CGRectGetMidX(self.subclassView.frame), CGRectGetMidY(self.subclassView.frame));
-    self.topView.transform = [self transform3D];
-    self.topView.contentsGravity = kCAGravityResizeAspect;
     self.topView.allowsEdgeAntialiasing=YES;
     self.topView.shadowColor=[UIColor whiteColor].CGColor;
     self.topView.shadowOpacity = 0.01f;
-
-  //  self.topView.shadowPath=[UIBezierPath bezierPathWithRect:self.topView.bounds].CGPath;
+    self.topView.transform = [self transform3D];
+    self.topView.frame=CGRectMake(0.f,
+                              0.f,
+                              CGRectGetWidth(self.scaleNTranslationLayer.bounds),
+                              CGRectGetMidY(self.scaleNTranslationLayer.bounds));
+    self.topView.anchorPoint = CGPointMake(0.5, 1.0);
+    self.topView.position = CGPointMake(CGRectGetMidX(self.scaleNTranslationLayer.bounds), CGRectGetMidY(self.scaleNTranslationLayer.bounds));
+    //self.topView.contentsGravity = kCAGravityResizeAspect;
     self.topShadowLayer.opacity = 0;
-    self.backImageLayer=[CALayer layer];
-    //self.backImageLayer.allowsEdgeAntialiasing=YES;
     self.backImageLayer.opacity=0.0;
-    self.backImageLayer.frame=self.topView.bounds;
-    self.backImageLayer.opaque=YES;
-    self.avatarLayer=[CALayer layer];
-    self.avatarLayer.contents=(__bridge id)[UIImage imageNamed:@"avatar"].CGImage;
-    self.avatarLayer.frame=CGRectMake(self.backImageLayer.bounds.size.width-115, self.backImageLayer.bounds.size.height-115, 100, 100);
-    CATransform3D  rot2 = CATransform3DMakeRotation(M_PI, -1, 0, 0);
-    self.avatarLayer.transform=rot2;
-    self.avatarLayer.cornerRadius=50.0f;
-    self.avatarLayer.borderWidth=0.5f;
-    self.avatarLayer.borderColor=[UIColor whiteColor].CGColor;
-    self.avatarLayer.masksToBounds=YES;
     self.backGradientLayer.opacity = 0.0;
-    self.backGradientLayer.startPoint=CGPointMake(0, -0.5f);
-    self.backGradientLayer.endPoint=CGPointMake(1, 1);
-    [self.topView addSublayer:self.backImageLayer];
+   [self.topView addSublayer:self.backImageLayer];
     [self.backImageLayer addSublayer:self.backGradientLayer];
     [self.backImageLayer addSublayer:self.avatarLayer];
     [self.topView addSublayer:self.topShadowLayer];
     [self.scaleNTranslationLayer addSublayer:self.topView];
+}
+-(CALayer*)avatarLayer{
+    if (!_avatarLayer) {
+        _avatarLayer=[CALayer layer];
+        _avatarLayer.contents=(__bridge id)[UIImage imageNamed:@"avatar"].CGImage;
+        _avatarLayer.frame=CGRectMake(self.backImageLayer.bounds.size.width-115, self.backImageLayer.bounds.size.height-115, 100, 100);
+        CATransform3D  rot2 = CATransform3DMakeRotation(M_PI, -1, 0, 0);
+        _avatarLayer.transform=rot2;
+        _avatarLayer.cornerRadius=50.0f;
+        _avatarLayer.borderWidth=0.5f;
+        _avatarLayer.borderColor=[UIColor whiteColor].CGColor;
+        _avatarLayer.masksToBounds=YES;
+    }
+    return _avatarLayer;
+}
+-(CALayer*)backImageLayer{
+    if (!_backImageLayer) {
+        _backImageLayer=[CALayer layer];
+        _backImageLayer.frame=self.topView.bounds;
+        _backImageLayer.opaque=YES;
+    }
+    return _backImageLayer;
 }
 -(CAGradientLayer*)backGradientLayer{
     if (!_backGradientLayer) {
@@ -162,16 +165,11 @@ typedef NS_ENUM(NSInteger, LayerSection) {
         _backGradientLayer.frame=self.topView.bounds;
         UIColor *fluorescentColor=[UIColor colorWithRed:141/255.0f green:218/255.0f blue:247/255.0f alpha:0.0f];
         _backGradientLayer.colors=@[(__bridge id)[UIColor clearColor].CGColor, (__bridge id)fluorescentColor.CGColor,(__bridge id)[UIColor whiteColor].CGColor,(__bridge id)[UIColor whiteColor].CGColor,(__bridge id)fluorescentColor.CGColor,(__bridge id)[UIColor clearColor].CGColor];
+        _backGradientLayer.startPoint=CGPointMake(0, -0.5f);
+        _backGradientLayer.endPoint=CGPointMake(1, 1);
     }
     return _backGradientLayer;
 }
-/*-(void)setupBackGradientLayer{
-    self.backLayer.opacity = 0.0;
-    UIColor *fluorescentColor=[UIColor colorWithRed:141/255.0f green:218/255.0f blue:247/255.0f alpha:0.0f];
-    self.backLayer.colors=@[(__bridge id)[UIColor clearColor].CGColor, (__bridge id)fluorescentColor.CGColor,(__bridge id)[UIColor whiteColor].CGColor,(__bridge id)[UIColor whiteColor].CGColor,(__bridge id)fluorescentColor.CGColor,(__bridge id)[UIColor clearColor].CGColor];
-    self.backLayer.startPoint=CGPointMake(0, -0.5f);
-    self.backLayer.endPoint=CGPointMake(1, 1);
-}*/
 /*-(void)setupBackTextLayer{
     self.backImageLayer=[CATextLayer layer];
     self.backImageLayer.opacity=0.0;
@@ -197,31 +195,38 @@ typedef NS_ENUM(NSInteger, LayerSection) {
 {
     self.bottomView=[CALayer layer];
     self.bottomView.frame =CGRectMake(0.f,
-                                      CGRectGetMidY(self.subclassView.bounds),
-                                      CGRectGetWidth(self.subclassView.bounds),
-                                      CGRectGetMidY(self.subclassView.bounds));
-    self.bottomView.backgroundColor=[UIColor blackColor].CGColor;
-    self.bottomView.contentsGravity = kCAGravityResizeAspect;
+                                      CGRectGetMidY(self.scaleNTranslationLayer.bounds),
+                                      CGRectGetWidth(self.scaleNTranslationLayer.bounds),
+                                      CGRectGetMidY(self.scaleNTranslationLayer.bounds));
     self.bottomView.opaque=YES;
     self.bottomView.shadowColor=[UIColor blackColor].CGColor;
     self.bottomView.shadowOffset=CGSizeMake(0,0);
     self.bottomView.shadowOpacity =0.85f ;
     self.bottomView.shadowRadius = 25.0f;
-    self.imprintLayer1=[CALayer layer];
-    self.imprintLayer1.frame=CGRectMake(0, self.bottomView.bounds.origin.y+0.6f, self.bottomView.bounds.size.width, 0.3f);
-    self.imprintLayer1.backgroundColor=[UIColor blackColor].CGColor;
     [self.bottomView addSublayer:self.imprintLayer1];
-    self.imprintLayer2=[CALayer layer];
-    self.imprintLayer2.frame=CGRectMake(0, self.bottomView.bounds.origin.y+1.7f, self.bottomView.bounds.size.width, 0.3f);
-    self.imprintLayer2.backgroundColor=[UIColor blackColor].CGColor;
     [self.bottomView addSublayer:self.imprintLayer2];
-    self.imprintLayer1.opacity=0.06f;
-    self.imprintLayer2.opacity=0.03f;
-    
     self.bottomShadowLayer.opacity = 0;
-    
     [self.bottomView addSublayer:self.bottomShadowLayer];
     [self.scaleNTranslationLayer addSublayer:self.bottomView];
+}
+-(CALayer*)imprintLayer2{
+    if (!_imprintLayer2) {
+        _imprintLayer2=[CALayer layer];
+        _imprintLayer2.frame=CGRectMake(0, self.bottomView.bounds.origin.y+1.7f, self.bottomView.bounds.size.width, 0.3f);
+        _imprintLayer2.backgroundColor=[UIColor blackColor].CGColor;
+        _imprintLayer2.opacity=0.03f;
+    }
+    return _imprintLayer2;
+}
+-(CALayer*)imprintLayer1{
+    if (!_imprintLayer1) {
+        _imprintLayer1=[CALayer layer];
+        _imprintLayer1.frame=CGRectMake(0, self.bottomView.bounds.origin.y+0.6f, self.bottomView.bounds.size.width, 0.3f);
+        _imprintLayer1.backgroundColor=[UIColor blackColor].CGColor;
+        _imprintLayer1.opacity=0.06f;
+
+    }
+    return _imprintLayer1;
 }
 -(CAGradientLayer*)bottomShadowLayer{
     if (!_bottomShadowLayer) {
@@ -428,7 +433,7 @@ typedef NS_ENUM(NSInteger, LayerSection) {
         [self.superViewLayer removeFromSuperlayer];
         [self.topView removeFromSuperlayer];
         [self.bottomView removeFromSuperlayer];
-            [self rotateToOriginCompletionBlockMethod];
+        [self rotateToOriginCompletionBlockMethod];
         self.foldGestureRecognizer.enabled=YES;
         self.adjustRotationSpeed=YES;
            //
@@ -466,7 +471,7 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     CGRect rect = CGRectMake(0.f, 0.f, image.size.width*2, image.size.height);
     if (section == LayerSectionBottom) {
         rect.origin.y = image.size.height / 1.f;
-}
+    }
     CGImageRef imgRef = CGImageCreateWithImageInRect(image.CGImage, rect);
     UIImage *imagePart = [UIImage imageWithCGImage:imgRef];
     CGImageRelease(imgRef);

@@ -7,27 +7,24 @@
 //
 
 #import "FoldingTableView.h"
-@interface FoldingTableView()<UIScrollViewDelegate,UIGestureRecognizerDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface FoldingTableView()<UIScrollViewDelegate,UIGestureRecognizerDelegate,UITableViewDelegate>
 @property(nonatomic)CALayer *pullDownLayer;
 @end
 @implementation FoldingTableView
--(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-}
+
 -(instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style{
     self=[super initWithFrame:frame];
     if (self) {
-        _tableView=[[UITableView alloc] initWithFrame:self.bounds style:style];
+        _tableView=[[UITableView alloc] initWithFrame:self.subclassView.frame style:style];
+        self.subclassView=_tableView;
         _tableView.delegate=self;
-        _tableView.dataSource=self;
-        [self addSubview:_tableView];
+        [self addSubview:self.subclassView];
         _pullDownLayer=[CALayer layer];
         _pullDownLayer.frame=CGRectMake(self.tableView.bounds.size.width/2 - 25,60, 50, 20);
         _pullDownLayer.contents=(__bridge id)([UIImage imageNamed:@"down"].CGImage);
         _pullDownLayer.opacity=0;
         _pullDownLayer.contentsScale=[UIScreen mainScreen].scale;
-        [self.tableView.layer addSublayer:_pullDownLayer];
-        self.subclassView=_tableView;
+        [self.subclassView.layer addSublayer:_pullDownLayer];
     }
     return self;
 }
