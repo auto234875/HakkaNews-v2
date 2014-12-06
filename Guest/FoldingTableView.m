@@ -7,16 +7,19 @@
 //
 
 #import "FoldingTableView.h"
-@interface FoldingTableView()<UIScrollViewDelegate,UIGestureRecognizerDelegate,UITableViewDelegate>
+@interface FoldingTableView()<UIScrollViewDelegate,UIGestureRecognizerDelegate,UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic)CALayer *pullDownLayer;
 @end
 @implementation FoldingTableView
-
+-(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+}
 -(instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style{
     self=[super initWithFrame:frame];
     if (self) {
         _tableView=[[UITableView alloc] initWithFrame:self.bounds style:style];
         _tableView.delegate=self;
+        _tableView.dataSource=self;
         [self addSubview:_tableView];
         _pullDownLayer=[CALayer layer];
         _pullDownLayer.frame=CGRectMake(self.tableView.bounds.size.width/2 - 25,60, 50, 20);

@@ -22,11 +22,12 @@
 @property(nonatomic,strong)NSIndexPath *voteIndexPath;
 @property(strong,nonatomic)NSMutableArray *upvoteComment;
 @property(strong,nonatomic)NSMutableArray *downvoteComment;
-@property(strong,nonatomic)FoldingTableView *foldingTableView;
+//@property(strong,nonatomic)FoldingTableView *foldingTableView;
 @end
 
 @implementation CommentsViewController
--(FoldingTableView*)foldingTableView{
+@dynamic view;
+/*-(FoldingTableView*)foldingTableView{
     if (!_foldingTableView) {
         _foldingTableView=[[FoldingTableView alloc] initWithFrame:[UIScreen mainScreen].bounds style:UITableViewStylePlain];
         _foldingTableView.tableView.delegate=self;
@@ -34,13 +35,12 @@
         self.view=_foldingTableView;
     }
     return _foldingTableView;
-}
-/*-(void)setupFoldingTableView{
+}*/
+-(void)loadView{
     self.view=[[FoldingTableView alloc] initWithFrame:[UIScreen mainScreen].bounds style:UITableViewStylePlain];
     ((FoldingTableView*)self.view).tableView.dataSource=self;
     ((FoldingTableView*)self.view).tableView.delegate=self;
-
-}*/
+}
 -(void)saveListOfUpvoteComment{
     [[NSUserDefaults standardUserDefaults] setObject:self.upvoteComment forKey:@"listOfUpvoteComment"];
 

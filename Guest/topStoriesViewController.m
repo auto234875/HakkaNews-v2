@@ -1,11 +1,10 @@
 //
 //  topStoriesViewController.m
-//  YNews
+//
 //
 //  Created by John Smith on 12/24/13.
 //  Copyright (c) 2013 John Smith. All rights reserved.
 //
-
 #import "topStoriesViewController.h"
 #import "CommentsViewController.h"
 #import <Colours/Colours.h>
@@ -33,7 +32,6 @@
 @property(nonatomic,strong)UIButton *topButton;
 @property(nonatomic,strong)UIButton *nButton;
 @property(nonatomic,strong)UIButton *askButton;
-
 @end
 @implementation topStoriesViewController
 #define postTitlePadding 15
@@ -295,7 +293,7 @@
     [cell.actionButton addTarget:self action:@selector(actionButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     cell.postDetail.frame=CGRectMake((self.tableView.bounds.size.width/2)-15, cell.likeButton.frame.origin.y, (self.tableView.bounds.size.width/2), 44);
     [cell.postDetail addTarget:self action:@selector(postDetailButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [cell.postDetail setTitle:[NSString stringWithFormat:@"%i points  %i comments", post.Points, post.CommentCount]
+    [cell.postDetail setTitle:[NSString stringWithFormat:@"%i Points  %i Comments", post.Points, post.CommentCount]
                      forState:UIControlStateNormal];
     if (self.userIsLoggedIn) {
         if (post.Type == PostTypeDefault || post.Type==PostTypeAskHN) {
@@ -434,25 +432,26 @@
     CommentsViewController *cvc=[[CommentsViewController alloc] init];
     //The post that we comment reply to
     cvc.replyPost = post;
-    cvc.view.frame=CGRectMake(0, -self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height);
-    //FoldingTableView *cvcView=(FoldingTableView*)cvc.view;
-    //[cvcView captureSuperViewScreenShot:self.view afterScreenUpdate:YES];
-    //[self.view addSubview:cvcView];
-    [self.view addSubview:cvc.view];
-    POPSpringAnimation *segueAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewFrame];
-    segueAnimation.toValue=[NSValue valueWithCGRect:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height)];
-    segueAnimation.springBounciness=5.0f;
-    segueAnimation.springSpeed=20.0f;
+    cvc.view.frame=self.view.frame;
+    FoldingTableView *cvcView=(FoldingTableView*)cvc.view;
+    [cvcView captureSuperViewScreenShot:self.view afterScreenUpdate:YES];
+    [self.view addSubview:cvcView];
+    //[self.view addSubview:cvc.view];
+    //POPSpringAnimation *segueAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewFrame];
+    //segueAnimation.toValue=[NSValue valueWithCGRect:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height)];
+    //segueAnimation.springBounciness=5.0f;
+    //segueAnimation.springSpeed=20.0f;
     //[cvcView pop_addAnimation:segueAnimation forKey:nil];
-    [cvc.view pop_addAnimation:segueAnimation forKey:nil];
+    //[cvcView pop_addAnimation:segueAnimation forKey:nil];
 
 }
 - (UIImage*)captureSuperViewScreenShot:(UIView *)view afterScreenUpdate:(BOOL)update
 {
     UIGraphicsBeginImageContextWithOptions(view.bounds.size, YES,0);
     [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:update];
-    return UIGraphicsGetImageFromCurrentImageContext();
+    UIImage *screenshot= UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    return screenshot;
 }
 -(void)showStoryOfPost:(HNPost*)post{
     [self saveTheListOfReadPost];

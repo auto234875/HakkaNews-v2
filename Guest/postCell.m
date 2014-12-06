@@ -35,8 +35,8 @@
 -(UIButton*)postDetail{
     if (!_postDetail) {
         _postDetail=[[UIButton alloc] init];
-        _postDetail.titleLabel.font=[UIFont fontWithName:@"AvenirNext-Regular" size:11];
-        [_postDetail setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+        _postDetail.titleLabel.font=[UIFont fontWithName:@"HelveticaNeue-Bold" size:11];
+        [_postDetail setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         [_postDetail setBackgroundColor:[UIColor snowColor]];
         _postDetail.contentHorizontalAlignment=UIControlContentHorizontalAlignmentRight;
         _postDetail.contentVerticalAlignment=UIControlContentHorizontalAlignmentCenter;

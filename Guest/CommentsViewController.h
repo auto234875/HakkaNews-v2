@@ -12,7 +12,6 @@
 
 @interface CommentsViewController : UIViewController
 @property (nonatomic, strong)NSArray *comments;
-@property (nonatomic, strong)NSString *title;
 @property (nonatomic, strong)HNPost *replyPost;
 @property (nonatomic, strong)HNComment *replyComment;
 @end
