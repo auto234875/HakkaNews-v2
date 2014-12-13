@@ -118,16 +118,16 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     self.topView=[CALayer layer];
     self.topView.opaque=YES;
     self.topView.allowsEdgeAntialiasing=YES;
-    self.topView.shadowColor=[UIColor whiteColor].CGColor;
-    self.topView.shadowOpacity = 0.01f;
+    //self.topView.shadowColor=[UIColor whiteColor].CGColor;
+    //self.topView.shadowOpacity = 0.01f;
     self.topView.transform = [self transform3D];
-    self.topView.frame=CGRectMake(0.f,
-                              0.f,
-                              CGRectGetWidth(self.scaleNTranslationLayer.bounds),
-                              CGRectGetMidY(self.scaleNTranslationLayer.bounds));
-    self.topView.anchorPoint = CGPointMake(0.5, 1.0);
-    self.topView.position = CGPointMake(CGRectGetMidX(self.scaleNTranslationLayer.bounds), CGRectGetMidY(self.scaleNTranslationLayer.bounds));
-    //self.topView.contentsGravity = kCAGravityResizeAspect;
+    self.topView.contentsScale=[UIScreen mainScreen].scale;
+    self.topView.frame=CGRectMake(0.0f,
+                              0.0f,
+                              CGRectGetWidth(self.bounds),
+                              CGRectGetMidY(self.bounds));
+    self.topView.anchorPoint = CGPointMake(0.5f, 1.0f);
+    self.topView.position = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
     self.topShadowLayer.opacity = 0;
     self.backImageLayer.opacity=0.0;
     self.backGradientLayer.opacity = 0.0;
@@ -140,9 +140,10 @@ typedef NS_ENUM(NSInteger, LayerSection) {
 -(CALayer*)avatarLayer{
     if (!_avatarLayer) {
         _avatarLayer=[CALayer layer];
+        _avatarLayer.contentsScale=[UIScreen mainScreen].scale;
         _avatarLayer.contents=(__bridge id)[UIImage imageNamed:@"avatar"].CGImage;
-        _avatarLayer.frame=CGRectMake(self.backImageLayer.bounds.size.width-115, self.backImageLayer.bounds.size.height-115, 100, 100);
-        CATransform3D  rot2 = CATransform3DMakeRotation(M_PI, -1, 0, 0);
+        _avatarLayer.frame=CGRectMake(self.backImageLayer.bounds.size.width-115.0f, self.backImageLayer.bounds.size.height-115.0f, 100.0f, 100.0f);
+        CATransform3D  rot2 = CATransform3DMakeRotation(M_PI, -1.0f, 0.f, 0.f);
         _avatarLayer.transform=rot2;
         _avatarLayer.cornerRadius=50.0f;
         _avatarLayer.borderWidth=0.5f;
@@ -194,10 +195,10 @@ typedef NS_ENUM(NSInteger, LayerSection) {
 - (void)addBottomView
 {
     self.bottomView=[CALayer layer];
-    self.bottomView.frame =CGRectMake(0.f,
-                                      CGRectGetMidY(self.scaleNTranslationLayer.bounds),
-                                      CGRectGetWidth(self.scaleNTranslationLayer.bounds),
-                                      CGRectGetMidY(self.scaleNTranslationLayer.bounds));
+    self.bottomView.frame =CGRectMake(0.0f,
+                                      CGRectGetMidY(self.bounds),
+                                      CGRectGetWidth(self.bounds),
+                                      CGRectGetMidY(self.bounds));
     self.bottomView.opaque=YES;
     self.bottomView.shadowColor=[UIColor blackColor].CGColor;
     self.bottomView.shadowOffset=CGSizeMake(0,0);
@@ -269,8 +270,8 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     }
     
     if ([[self.topView valueForKeyPath:@"transform.rotation.x"] floatValue] < -M_PI_2) {
-        self.backGradientLayer.opacity = 0.3;
-        self.backImageLayer.opacity=1.0;
+        self.backGradientLayer.opacity = 0.3f;
+        self.backImageLayer.opacity=1.0f;
         [CATransaction begin];
         [CATransaction setValue:(id)kCFBooleanTrue
                          forKey:kCATransactionDisableActions];
@@ -278,8 +279,8 @@ typedef NS_ENUM(NSInteger, LayerSection) {
         self.bottomShadowLayer.opacity = (location.y-self.initialLocation)/(CGRectGetHeight(self.bounds)-self.initialLocation);
         [CATransaction commit];
     } else {
-        self.backGradientLayer.opacity = 0.0;
-        self.backImageLayer.opacity=0.0;
+        self.backGradientLayer.opacity = 0.0f;
+        self.backImageLayer.opacity=0.0f;
         [CATransaction begin];
         [CATransaction setValue:(id)kCFBooleanTrue
                          forKey:kCATransactionDisableActions];
@@ -306,14 +307,14 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     }
     
     if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled) {
-        CGFloat angle=(-([[self.topView valueForKeyPath:@"transform.rotation.x"]floatValue]*(180/M_PI)));
+        CGFloat angle=(-([[self.topView valueForKeyPath:@"transform.rotation.x"]floatValue]*(180.0f/M_PI)));
 
-        if (angle < 45){
-        [self rotateToOriginWithVelocity:0];
+        if (angle < 45.0f){
+        [self rotateToOriginWithVelocity:0.f];
         [self rescaleLayer];
         recognizer.enabled=NO;}
         else{
-            [self closeWithVelocity:0];
+            [self closeWithVelocity:0.0f];
             
         }
     }
@@ -323,7 +324,7 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     POPBasicAnimation *scaleAnimation=[POPBasicAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
     POPBasicAnimation *translateAnimation=[POPBasicAnimation animationWithPropertyNamed:kPOPLayerTranslationX];
     CGFloat rotationAngle;
-    CGFloat hypotenuse=self.bounds.size.height/2;
+    CGFloat hypotenuse=self.bounds.size.height/2.0f;
     CGFloat adjacent=fabsf(hypotenuse-verticalPoint);
     CGFloat nonadjustedAngle= -(acos(adjacent/hypotenuse));
     if (verticalPoint >(self.center.y)){
@@ -332,27 +333,27 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     else{
         rotationAngle=nonadjustedAngle;
     }
-    const CGFloat scaleConversionFactor= 1-(angle/650);
+    const CGFloat scaleConversionFactor= 1.0f-(angle/650.0f);
     const CGFloat maxScaleAngle=90.0f;
-    const CGFloat maxDownScaleConversionFactor= 1-(maxScaleAngle/650);
+    const CGFloat maxDownScaleConversionFactor= 1.0f-(maxScaleAngle/650.0f);
     
     translateAnimation.toValue=@(startingpoint);
-    translateAnimation.duration=0.01;
-    scaleAnimation.duration=0.01;
-    if (angle > 0  && angle <= maxScaleAngle) {
+    translateAnimation.duration=0.01f;
+    scaleAnimation.duration=0.01f;
+    if (angle > 0.0f  && angle <= maxScaleAngle) {
         scaleAnimation.toValue=[NSValue valueWithCGSize:CGSizeMake(scaleConversionFactor,scaleConversionFactor)];
     }
     else if (angle > maxScaleAngle){
         scaleAnimation.toValue=[NSValue valueWithCGSize:CGSizeMake(maxDownScaleConversionFactor, maxDownScaleConversionFactor)];
     }
     else{
-        scaleAnimation.toValue=[NSValue valueWithCGSize:CGSizeMake(1, 1)];
+        scaleAnimation.toValue=[NSValue valueWithCGSize:CGSizeMake(1.0f, 1.0f)];
     }
     if (self.adjustRotationSpeed) {
-    rotationAnimation.duration=(-rotationAngle*(180/M_PI))/1400;
+    rotationAnimation.duration=(-rotationAngle*(180.0f/M_PI))/1400.0f;
     }
     else{
-        rotationAnimation.duration=0.01;
+        rotationAnimation.duration=0.01f;
     }
     [rotationAnimation setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
         if (finished) {
@@ -366,21 +367,21 @@ typedef NS_ENUM(NSInteger, LayerSection) {
 }
 -(void)rescaleLayer{
     
-    const CGFloat scaleConversionFactor= 1-(self.angle/650);
+    const CGFloat scaleConversionFactor= 1.0f-(self.angle/650.0f);
     const CGFloat maxScaleAngle=90.0f;
-    const CGFloat maxDownScaleConversionFactor= 1-(maxScaleAngle/650);
+    const CGFloat maxDownScaleConversionFactor= 1-(maxScaleAngle/650.0f);
     POPSpringAnimation *scaleAnimation=[POPSpringAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
     POPSpringAnimation *translateAnimation=[POPSpringAnimation animationWithPropertyNamed:kPOPLayerTranslationX];
-    translateAnimation.toValue=@(0);
+    translateAnimation.toValue=@(0.0f);
     
-    if (self.angle > 0  && self.angle <= maxScaleAngle) {
+    if (self.angle > 0.0f  && self.angle <= maxScaleAngle) {
         scaleAnimation.toValue=[NSValue valueWithCGSize:CGSizeMake(scaleConversionFactor, scaleConversionFactor)];
     }
     else if (self.angle > maxScaleAngle){
         scaleAnimation.toValue=[NSValue valueWithCGSize:CGSizeMake(maxDownScaleConversionFactor, maxDownScaleConversionFactor)];
     }
     else{
-        scaleAnimation.toValue=[NSValue valueWithCGSize:CGSizeMake(1, 1)];
+        scaleAnimation.toValue=[NSValue valueWithCGSize:CGSizeMake(1.0f, 1.0f)];
     }
     [self.scaleNTranslationLayer pop_addAnimation:scaleAnimation forKey:@"scaleAnimation"];
     [self.scaleNTranslationLayer pop_addAnimation:translateAnimation forKey:@"translateAnimation"];
@@ -389,14 +390,14 @@ typedef NS_ENUM(NSInteger, LayerSection) {
 -(void)closeWithVelocity:(CGFloat)velocity{
     POPSpringAnimation *rotateToCloseAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerRotationX];
     POPBasicAnimation *scaleToCloseAnimation = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
-    scaleToCloseAnimation.toValue=[NSValue valueWithCGSize:CGSizeMake(0, 0)];
+    scaleToCloseAnimation.toValue=[NSValue valueWithCGSize:CGSizeMake(0.0f, 0.0f)];
     scaleToCloseAnimation.duration=0.4f;
-    if (velocity > 0) {
+    if (velocity > 0.0f) {
         rotateToCloseAnimation.velocity = @(velocity);
     }
     rotateToCloseAnimation.springBounciness = 0.0f;
     rotateToCloseAnimation.dynamicsMass = 2.0f;
-    rotateToCloseAnimation.dynamicsTension = 200;
+    rotateToCloseAnimation.dynamicsTension = 200.0f;
     rotateToCloseAnimation.toValue = @(-M_PI);
     rotateToCloseAnimation.delegate = self;
     [scaleToCloseAnimation setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
@@ -425,7 +426,7 @@ typedef NS_ENUM(NSInteger, LayerSection) {
         if (finished){
             self.imprintLayer1=nil;
             self.imprintLayer2=nil;
-            self.bottomView.shadowOpacity=0;
+            self.bottomView.shadowOpacity=0.0f;
         }
     }];
     [rotationAnimation setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
@@ -436,16 +437,16 @@ typedef NS_ENUM(NSInteger, LayerSection) {
         [self rotateToOriginCompletionBlockMethod];
         self.foldGestureRecognizer.enabled=YES;
         self.adjustRotationSpeed=YES;
-           //
+           
         }
     }];
-     if (velocity > 0) {
+     if (velocity > 0.0f) {
         rotationAnimation.velocity = @(velocity);
     }
     rotationAnimation.springBounciness = 0.0f;
     rotationAnimation.dynamicsMass = 2.0f;
-    rotationAnimation.dynamicsTension = 200;
-    rotationAnimation.toValue = @(0);
+    rotationAnimation.dynamicsTension = 200.0f;
+    rotationAnimation.toValue = @(0.0f);
     rotationAnimation.delegate = self;
     [self.topView pop_addAnimation:rotationAnimation forKey:@"rotationAnimation"];
 }
@@ -453,7 +454,7 @@ typedef NS_ENUM(NSInteger, LayerSection) {
 - (CATransform3D)transform3D
 {
     CATransform3D transform = CATransform3DIdentity;
-    transform.m34 = 2.5 / -4600;
+    transform.m34 = 2.5f / -4600.0f;
     return transform;
 }
 
@@ -468,12 +469,13 @@ typedef NS_ENUM(NSInteger, LayerSection) {
 
 - (UIImage *)imageForSection:(LayerSection)section withImage:(UIImage *)image
 {
-    CGRect rect = CGRectMake(0.f, 0.f, image.size.width*2, image.size.height);
+    CGRect rect = CGRectMake(0.0f, 0.0f, image.size.width*[UIScreen mainScreen].scale, image.size.height*([UIScreen mainScreen].scale/2));
     if (section == LayerSectionBottom) {
-        rect.origin.y = image.size.height / 1.f;
+        rect.origin.y =image.size.height*([UIScreen mainScreen].scale/2.0f);
     }
+    
     CGImageRef imgRef = CGImageCreateWithImageInRect(image.CGImage, rect);
-    UIImage *imagePart = [UIImage imageWithCGImage:imgRef];
+    UIImage *imagePart = [UIImage imageWithCGImage:imgRef scale:[UIScreen mainScreen].scale orientation:image.imageOrientation];
     CGImageRelease(imgRef);
     
     return imagePart;
@@ -482,7 +484,7 @@ typedef NS_ENUM(NSInteger, LayerSection) {
 
 - (void)pop_animationDidApply:(POPAnimation *)anim
 {
-    self.angle=(-([[self.topView valueForKeyPath:@"transform.rotation.x"]floatValue]*(180/M_PI)));
+    self.angle=(-([[self.topView valueForKeyPath:@"transform.rotation.x"]floatValue]*(180.0f/M_PI)));
 }
 
 @end
