@@ -16,11 +16,9 @@
 #import "HNManager.h"
 #import <MCFireworksButton.h>
 #import "FoldingTableView.h"
-@interface topStoriesViewController () <UIGestureRecognizerDelegate,UIScrollViewDelegate,UIActionSheetDelegate,UITableViewDataSource,UITableViewDelegate,FoldingViewDelegate>
+@interface topStoriesViewController () <UIGestureRecognizerDelegate,POPAnimationDelegate,UIScrollViewDelegate,UIActionSheetDelegate,UITableViewDataSource,UITableViewDelegate,FoldingViewDelegate>
 @property (nonatomic, strong) NSMutableArray *readPost;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
-@property (nonatomic, strong) NSMutableArray *comments;
-@property (nonatomic, strong)NSIndexPath *selectedIndexPath;
 @property(nonatomic)BOOL userIsLoggedIn;
 @property (nonatomic, strong)NSIndexPath *upvoteIndexPath;
 @property(strong, nonatomic)UIActionSheet *as;
@@ -32,6 +30,16 @@
 @property(nonatomic,strong)UIButton *topButton;
 @property(nonatomic,strong)UIButton *nButton;
 @property(nonatomic,strong)UIButton *askButton;
+@property(nonatomic,strong)CALayer *topView;
+@property(nonatomic,strong)CALayer *bottomView;
+@property(nonatomic,strong)CATransformLayer *scaleNTranslationLayer;
+@property(nonatomic,strong)CAGradientLayer *bottomShadowLayer;
+@property(nonatomic,strong)CAGradientLayer *topShadowLayer;
+@property(nonatomic,strong)CALayer *imprintLayer1;
+@property(nonatomic,strong)CALayer *imprintLayer2;
+@property(nonatomic,strong)CALayer *backImageLayer;
+@property(nonatomic,strong)CALayer *avatarLayer;
+@property(nonatomic,strong)CAGradientLayer *backGradientLayer;
 @end
 @implementation topStoriesViewController
 #define postTitlePadding 15
@@ -113,7 +121,7 @@
     [self initialUserSetup];
     [self retrieveListofReadPost];
     [self retrieveListofUpvote];
-    self.postType=@"Top";
+    self.postType=@"New";
     [self getStories];
     self.tableView.backgroundColor=[UIColor snowColor];
     self.tableView.delaysContentTouches=NO;
@@ -312,47 +320,37 @@
 }
 -(void)postDetailButtonPressed:(UIButton*)sender{
     HNPost *post=[self.currentPosts objectAtIndex:sender.tag];
+    NSIndexPath *indexPath=[NSIndexPath indexPathForItem:sender.tag inSection:0];
     if (post.Type==PostTypeDefault) {
         //if there is no comment, we don't segue
         if (post.CommentCount==0){
-            //show animation
+            //show animation for no comment
             return;
         }
         else {
-            //we add the post to the read post list and segue to comment
-            [self.readPost addObject:post.PostId];
-            [self showComment:post];
-            
-        }
+            [self showComment:post indexPath:indexPath];
+            }
         
     }
     else if (post.Type == PostTypeAskHN){
         //we always show the comment because it's askHN
         //askHN always have at least 1 comment
         [self.readPost addObject:post.PostId];
-        [self showComment:post];
+        [self showComment:post indexPath:indexPath];
         
     }
     //Job Post, check to see if it's a self post or webpage by loading the first comment and checking the string
     else if (post.Type == PostTypeJobs){[[HNManager sharedManager] loadCommentsFromPost:post completion:^(NSArray *comments) {
         HNComment *firstComment = [comments firstObject];
         if (![firstComment.Text isEqualToString:@""]) {
-            if (self.comments) {
-                self.comments = [comments mutableCopy];}
-            else{
-                self.comments = [NSMutableArray arrayWithArray:comments];
-            }
             [self.readPost addObject:post.PostId];
-            [self showComment:post];
-            
-        }
+            [self showComment:post indexPath:indexPath];
+            }
         else {
             [self.readPost addObject:post.PostId];
-            [self showStoryOfPost:post];
-            
-        }
-        
-    }];}
+            [self showStoryOfPost:post indexPath:indexPath];
+            }
+        }];}
 }
 -(void)likeButtonPressed:(MCFireworksButton*)sender{
     HNPost *post=[self.currentPosts objectAtIndex:sender.tag];
@@ -392,87 +390,254 @@
     cell.postTitle.text=post.Title;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    //get the indexpath of the selected cell so we can perform segue
-    self.selectedIndexPath = indexPath;
     //retrieve the corresponding post
     HNPost *post=[self.currentPosts objectAtIndex:indexPath.row];
     //add it to the the list of read posts
     [self.readPost addObject:post.PostId];
     //if the post is default, we go to the webpage
     if (post.Type == PostTypeDefault){
-        [self showStoryOfPost:post];
+        [self showStoryOfPost:post indexPath:indexPath];
 
     }
     //if the post is ask, we show the comment because AskHN is always self-post on HN
     else if (post.Type == PostTypeAskHN){
-        [self showComment:post];
+        [self showComment:post indexPath:indexPath];
 
         }
     //if it is a job post, we have to load the comment and check to see if it is self post or from a webpage
     else if (post.Type== PostTypeJobs){
         [[HNManager sharedManager] loadCommentsFromPost:post completion:^(NSArray *comments) {
             //getting the first comment and checking if the string is empty
-            //the string is NEVER nil
+            //the string is NEVER nil but it can contain no character if the post is an external site
             HNComment *firstComment = [comments firstObject];
             if (![firstComment.Text isEqualToString:@""]) {
-                if (self.comments) {
-                    self.comments = [comments mutableCopy];}
-                else{
-                    self.comments = [NSMutableArray arrayWithArray:comments];}
-                [self showComment:post];
+                [self showComment:post indexPath:indexPath];
             }
             else {
-                [self showStoryOfPost:post];
+                [self showStoryOfPost:post indexPath:indexPath];
             }
         
         
         }];}
 }
--(void)showComment:(HNPost*)post{
+-(void)deselectAndRefreshRowAtIndexPath:(NSIndexPath*)indexPath{
+    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+}
+-(void)showComment:(HNPost*)post indexPath:(NSIndexPath*)indexPath{
+    [self saveTheListOfReadPost];
+    [self deselectAndRefreshRowAtIndexPath:indexPath];
+    self.tableView.scrollEnabled=NO;
     CommentsViewController *cvc=[[CommentsViewController alloc] init];
     //The post that we comment reply to
     cvc.replyPost = post;
     cvc.view.frame=self.view.frame;
     FoldingTableView *cvcView=(FoldingTableView*)cvc.view;
+    cvcView.delegate=self;
     [cvcView captureSuperViewScreenShot:self.view afterScreenUpdate:YES];
-    [self.view addSubview:cvcView];
-    //[self.view addSubview:cvc.view];
-    //POPSpringAnimation *segueAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewFrame];
-    //segueAnimation.toValue=[NSValue valueWithCGRect:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height)];
-    //segueAnimation.springBounciness=5.0f;
-    //segueAnimation.springSpeed=20.0f;
-    //[cvcView pop_addAnimation:segueAnimation forKey:nil];
-    //[cvcView pop_addAnimation:segueAnimation forKey:nil];
-
+    [self unfoldView:^(BOOL finished) {
+        if (finished){
+            [self.view addSubview:cvcView];
+            self.view.userInteractionEnabled=YES;
+            [self.scaleNTranslationLayer removeFromSuperlayer];
+            [self.topView removeFromSuperlayer];
+            [self.bottomView removeFromSuperlayer];
+        }
+    }];
 }
-- (UIImage*)captureSuperViewScreenShot:(UIView *)view afterScreenUpdate:(BOOL)update
-{
-    UIGraphicsBeginImageContextWithOptions(view.bounds.size, YES,0);
-    [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:update];
-    UIImage *screenshot= UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return screenshot;
-}
--(void)showStoryOfPost:(HNPost*)post{
+-(void)showStoryOfPost:(HNPost*)post indexPath:(NSIndexPath*)indexPath{
     [self saveTheListOfReadPost];
-    [self.tableView deselectRowAtIndexPath:self.selectedIndexPath animated:NO];
-    [self.tableView reloadRowsAtIndexPaths:@[self.selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self deselectAndRefreshRowAtIndexPath:indexPath];
      self.tableView.scrollEnabled=NO;
     NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:post.UrlString]];
-    CGRect frame = CGRectMake(0, -self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height);
-    FoldingWebView *foldView = [[FoldingWebView alloc] initWithFrame:frame request:request];
+    FoldingWebView *foldView = [[FoldingWebView alloc] initWithFrame:self.view.bounds request:request];
     foldView.delegate=self;
     [foldView captureSuperViewScreenShot:self.view afterScreenUpdate:YES];
-    [self.view addSubview:foldView];
-   POPSpringAnimation *segueAnimation = [POPSpringAnimation animationWithPropertyNamed:kPOPViewFrame];
-    segueAnimation.toValue=[NSValue valueWithCGRect:CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height)];
-    segueAnimation.springBounciness=5.0f;
-    segueAnimation.springSpeed=20.0f;
-    [foldView pop_addAnimation:segueAnimation forKey:nil];
+    [self unfoldView:^(BOOL finished) {
+        if (finished){
+            [self.view addSubview:foldView];
+            self.view.userInteractionEnabled=YES;
+            [self.scaleNTranslationLayer removeFromSuperlayer];
+            [self.topView removeFromSuperlayer];
+            [self.bottomView removeFromSuperlayer];
+        }
+            }];
+
+   
+}
+typedef void(^myCompletion)(BOOL);
+
+-(void)unfoldView:(myCompletion)completionBlock{
+    self.view.userInteractionEnabled=NO;
+    [self addTopView];
+    [self addBottomView];
+    POPBasicAnimation *anim=[POPBasicAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
+    POPBasicAnimation *rotationAnimation=[POPBasicAnimation animationWithPropertyNamed:kPOPLayerRotationX];
+    rotationAnimation.toValue=@(-M_PI*0.99f);
+    rotationAnimation.duration=0;
+    rotationAnimation.removedOnCompletion=YES;
+    anim.removedOnCompletion=YES;
+    [self.topView pop_addAnimation:rotationAnimation forKey:nil];
+     anim.toValue=[NSValue valueWithCGSize:CGSizeMake(0.01f, 0.01f)];
+     anim.duration=0;
+     [anim setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
+     if (finished){
+         [self.view.layer addSublayer:self.scaleNTranslationLayer];
+         const CGFloat maxScaleAngle=90.0f;
+         const CGFloat maxDownScaleConversionFactor= 1.0f-(maxScaleAngle/650.0f);
+         POPBasicAnimation *anim1=[POPBasicAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
+         anim1.toValue=[NSValue valueWithCGSize:CGSizeMake(maxDownScaleConversionFactor, maxDownScaleConversionFactor)];
+         anim1.duration=0.2f;
+         anim1.removedOnCompletion=YES;
+         [anim1 setCompletionBlock:^(POPAnimation *anim1, BOOL finished) {
+             if (finished) {
+                 POPBasicAnimation *unfold=[POPBasicAnimation animationWithPropertyNamed:kPOPLayerRotationX];
+                 POPBasicAnimation *expand=[POPBasicAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
+                 unfold.toValue=@(0);
+                unfold.duration=0.6f;
+                 unfold.delegate=self;
+                 unfold.removedOnCompletion=YES;
+                 [unfold setCompletionBlock:^(POPAnimation *unfold, BOOL finished) {
+                     completionBlock(YES);
+                 }];
+                 expand.toValue=[NSValue valueWithCGSize:CGSizeMake(1.0f, 1.0f)];
+                 expand.duration=0.6f;
+                 expand.removedOnCompletion=YES;
+                 [self.scaleNTranslationLayer pop_addAnimation:expand forKey:nil];
+                 [self.topView pop_addAnimation:unfold forKey:@"unfold"];
+             }
+         }];
+     [self.scaleNTranslationLayer pop_addAnimation:anim1 forKey:nil];
+     }
+     }];
+    [self.scaleNTranslationLayer pop_addAnimation:anim forKey:nil];
+
 }
 -(void)foldingViewHasClosed{
-    NSLog(@"closed");
     self.tableView.scrollEnabled=YES;
+}
+-(CATransformLayer*)scaleNTranslationLayer{
+    if (!_scaleNTranslationLayer) {
+        _scaleNTranslationLayer=[CATransformLayer layer];
+        _scaleNTranslationLayer.frame=self.view.bounds;
+    }
+    return _scaleNTranslationLayer;
+}
+- (void)addTopView
+{
+    self.topView=[CALayer layer];
+    self.topView.backgroundColor=[UIColor whiteColor].CGColor;
+    self.topView.opaque=YES;
+    self.topView.allowsEdgeAntialiasing=YES;
+    CATransform3D transform = CATransform3DIdentity;
+    transform.m34 = 2.5f / -4600.0f;
+    self.topView.transform=transform;
+
+    self.topView.contentsScale=[UIScreen mainScreen].scale;
+    self.topView.frame=CGRectMake(0.0f,
+                                  0.0f,
+                                  CGRectGetWidth(self.scaleNTranslationLayer.bounds),
+                                  CGRectGetMidY(self.scaleNTranslationLayer.bounds));
+    self.topView.anchorPoint = CGPointMake(0.5f, 1.0f);
+    self.topView.position = CGPointMake(CGRectGetMidX(self.scaleNTranslationLayer.bounds), CGRectGetMidY(self.scaleNTranslationLayer.bounds));
+    self.topShadowLayer.opacity=0;
+    self.backImageLayer.opacity=1.0f;
+    self.backGradientLayer.opacity = 0.3f;
+   [self.topView addSublayer:self.topShadowLayer];
+    [self.topView addSublayer:self.backImageLayer];
+    [self.backImageLayer addSublayer:self.avatarLayer];
+    [self.backImageLayer addSublayer:self.backGradientLayer];
+    [self.scaleNTranslationLayer addSublayer:self.topView];
+}
+- (void)addBottomView
+{
+    self.bottomView=[CALayer layer];
+    self.bottomView.backgroundColor=[UIColor whiteColor].CGColor;
+    self.bottomView.frame =CGRectMake(0.0f,
+                                      CGRectGetMidY(self.scaleNTranslationLayer.bounds),
+                                      CGRectGetWidth(self.scaleNTranslationLayer.bounds),
+                                      CGRectGetMidY(self.scaleNTranslationLayer.bounds));
+    self.bottomView.opaque=YES;
+    self.bottomView.shadowColor=[UIColor blackColor].CGColor;
+    self.bottomView.shadowOffset=CGSizeMake(0,0);
+    self.bottomView.shadowOpacity =0.85f ;
+    self.bottomView.shadowRadius = 25.0f;
+    [self.bottomView setShadowPath:[UIBezierPath bezierPathWithRect:CGRectMake(self.bottomView.bounds.origin.x, self.bottomView.bounds.origin.y+50, self.bottomView.bounds.size.width, self.bottomView.bounds.size.height-50)].CGPath];
+    [self.bottomView addSublayer:self.imprintLayer1];
+    [self.bottomView addSublayer:self.imprintLayer2];
+    self.bottomShadowLayer.opacity = 0;
+    [self.bottomView addSublayer:self.bottomShadowLayer];
+    [self.scaleNTranslationLayer addSublayer:self.bottomView];
+}
+-(CALayer*)imprintLayer2{
+    if (!_imprintLayer2) {
+        _imprintLayer2=[CALayer layer];
+        _imprintLayer2.frame=CGRectMake(0, self.bottomView.bounds.origin.y+1.7f, self.bottomView.bounds.size.width, 0.3f);
+        _imprintLayer2.backgroundColor=[UIColor blackColor].CGColor;
+        _imprintLayer2.opacity=0.03f;
+    }
+    return _imprintLayer2;
+}
+-(CALayer*)imprintLayer1{
+    if (!_imprintLayer1) {
+        _imprintLayer1=[CALayer layer];
+        _imprintLayer1.frame=CGRectMake(0, self.bottomView.bounds.origin.y+0.6f, self.bottomView.bounds.size.width, 0.3f);
+        _imprintLayer1.backgroundColor=[UIColor blackColor].CGColor;
+        _imprintLayer1.opacity=0.06f;
+        
+    }
+    return _imprintLayer1;
+}
+-(CAGradientLayer*)bottomShadowLayer{
+    if (!_bottomShadowLayer) {
+        _bottomShadowLayer = [CAGradientLayer layer];
+        _bottomShadowLayer.frame = self.bottomView.bounds;
+        _bottomShadowLayer.colors = @[(id)[UIColor blackColor].CGColor, (id)[UIColor clearColor].CGColor];
+    }
+    return _bottomShadowLayer;
+}
+-(CAGradientLayer*)topShadowLayer{
+    if (!_topShadowLayer) {
+        _topShadowLayer = [CAGradientLayer layer];
+        _topShadowLayer.frame = self.topView.bounds;
+        _topShadowLayer.colors = @[(id)[UIColor clearColor].CGColor, (id)[UIColor blackColor].CGColor];
+    }
+    return _topShadowLayer;
+}
+-(CALayer*)avatarLayer{
+    if (!_avatarLayer) {
+        _avatarLayer=[CALayer layer];
+        _avatarLayer.contentsScale=[UIScreen mainScreen].scale;
+        _avatarLayer.contents=(__bridge id)[UIImage imageNamed:@"avatar"].CGImage;
+        _avatarLayer.frame=CGRectMake(self.backImageLayer.bounds.size.width-115.0f, self.backImageLayer.bounds.size.height-115.0f, 100.0f, 100.0f);
+        CATransform3D  rot2 = CATransform3DMakeRotation(M_PI, -1.0f, 0.f, 0.f);
+        _avatarLayer.transform=rot2;
+        _avatarLayer.cornerRadius=50.0f;
+        _avatarLayer.borderWidth=0.5f;
+        _avatarLayer.borderColor=[UIColor whiteColor].CGColor;
+        _avatarLayer.masksToBounds=YES;
+    }
+    return _avatarLayer;
+}
+-(CALayer*)backImageLayer{
+    if (!_backImageLayer) {
+        _backImageLayer=[CALayer layer];
+        _backImageLayer.frame=self.topView.bounds;
+        _backImageLayer.backgroundColor=[UIColor blackColor].CGColor;
+        _backImageLayer.opaque=YES;
+    }
+    return _backImageLayer;
+}
+-(CAGradientLayer*)backGradientLayer{
+    if (!_backGradientLayer) {
+        _backGradientLayer=[CAGradientLayer layer];
+        _backGradientLayer.frame=self.topView.bounds;
+        UIColor *fluorescentColor=[UIColor colorWithRed:141/255.0f green:218/255.0f blue:247/255.0f alpha:0.0f];
+        _backGradientLayer.colors=@[(__bridge id)[UIColor clearColor].CGColor, (__bridge id)fluorescentColor.CGColor,(__bridge id)[UIColor whiteColor].CGColor,(__bridge id)[UIColor whiteColor].CGColor,(__bridge id)fluorescentColor.CGColor,(__bridge id)[UIColor clearColor].CGColor];
+        _backGradientLayer.startPoint=CGPointMake(0, -0.5f);
+        _backGradientLayer.endPoint=CGPointMake(1, 1);
+    }
+    return _backGradientLayer;
 }
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *) cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -509,8 +674,33 @@
             
         }];
         }}}
-
-    
-
+}
+- (void)pop_animationDidApply:(POPAnimation *)anim
+{
+    CGFloat angle=(-([[self.topView valueForKeyPath:@"transform.rotation.x"]floatValue]*(180.0f/M_PI)));
+    if (angle > 90.0f){
+        [CATransaction begin];
+        [CATransaction setValue:(id)kCFBooleanTrue
+                         forKey:kCATransactionDisableActions];
+        self.backGradientLayer.opacity = 0.3f;
+        self.backImageLayer.opacity=1.0f;
+        self.bottomShadowLayer.opacity = 0.5f;
+        self.topShadowLayer.opacity = 0.5f;
+        [CATransaction commit];
+        CGFloat shineGradientFactor=angle*0.02071429f;
+        [CATransaction begin];
+        [CATransaction setValue:@0.016f forKey:kCATransactionAnimationDuration];
+        self.backGradientLayer.locations=@[[NSNumber numberWithFloat:-2.45f+shineGradientFactor],[NSNumber numberWithFloat:-2.4f+shineGradientFactor],[NSNumber numberWithFloat:-2.34f+shineGradientFactor],[NSNumber numberWithFloat:-2.09f+shineGradientFactor],[NSNumber numberWithFloat:-2.05f+shineGradientFactor],[NSNumber numberWithFloat:-2.0f+shineGradientFactor]];
+        [CATransaction commit];
+    }else{
+     [CATransaction begin];
+     [CATransaction setValue:(id)kCFBooleanTrue
+     forKey:kCATransactionDisableActions];
+        self.backGradientLayer.opacity = 0.0f;
+     self.backImageLayer.opacity=0.0f;
+     self.bottomShadowLayer.opacity = angle/180.0f;
+     self.topShadowLayer.opacity = angle/180.0f;
+     [CATransaction commit];
+    }
 }
 @end

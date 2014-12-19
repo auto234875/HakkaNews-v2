@@ -59,12 +59,9 @@ typedef NS_ENUM(NSInteger, LayerSection) {
         [self addSubview:_subclassView];
         [self addGestureRecognizers];
         _adjustRotationSpeed=YES;
-
     }
     return self;
 }
-
-
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
     return YES;
 }
@@ -116,6 +113,7 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     [self.layer addSublayer:self.superViewLayer];
    [self.layer addSublayer:self.scaleNTranslationLayer];
     self.topView=[CALayer layer];
+    self.topView.backgroundColor=[UIColor whiteColor].CGColor;
     self.topView.opaque=YES;
     self.topView.allowsEdgeAntialiasing=YES;
     //self.topView.shadowColor=[UIColor whiteColor].CGColor;
@@ -124,16 +122,17 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     self.topView.contentsScale=[UIScreen mainScreen].scale;
     self.topView.frame=CGRectMake(0.0f,
                               0.0f,
-                              CGRectGetWidth(self.bounds),
-                              CGRectGetMidY(self.bounds));
+                              CGRectGetWidth(self.scaleNTranslationLayer.bounds),
+                              CGRectGetMidY(self.scaleNTranslationLayer.bounds));
     self.topView.anchorPoint = CGPointMake(0.5f, 1.0f);
-    self.topView.position = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+    self.topView.position = CGPointMake(CGRectGetMidX(self.scaleNTranslationLayer.bounds), CGRectGetMidY(self.scaleNTranslationLayer.bounds));
     self.topShadowLayer.opacity = 0;
     self.backImageLayer.opacity=0.0;
     self.backGradientLayer.opacity = 0.0;
    [self.topView addSublayer:self.backImageLayer];
-    [self.backImageLayer addSublayer:self.backGradientLayer];
     [self.backImageLayer addSublayer:self.avatarLayer];
+    [self.backImageLayer addSublayer:self.backGradientLayer];
+
     [self.topView addSublayer:self.topShadowLayer];
     [self.scaleNTranslationLayer addSublayer:self.topView];
 }
@@ -195,10 +194,11 @@ typedef NS_ENUM(NSInteger, LayerSection) {
 - (void)addBottomView
 {
     self.bottomView=[CALayer layer];
+    self.bottomView.backgroundColor=[UIColor blackColor].CGColor;
     self.bottomView.frame =CGRectMake(0.0f,
-                                      CGRectGetMidY(self.bounds),
-                                      CGRectGetWidth(self.bounds),
-                                      CGRectGetMidY(self.bounds));
+                                      CGRectGetMidY(self.scaleNTranslationLayer.bounds),
+                                      CGRectGetWidth(self.scaleNTranslationLayer.bounds),
+                                      CGRectGetMidY(self.scaleNTranslationLayer.bounds));
     self.bottomView.opaque=YES;
     self.bottomView.shadowColor=[UIColor blackColor].CGColor;
     self.bottomView.shadowOffset=CGSizeMake(0,0);
@@ -257,7 +257,8 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     self.bottomView.contents = (__bridge id)(bottomImage.CGImage);
 }
 -(void)handlePanControl{
-    
+    //do not delete
+    //method for subclass
 }
 - (void)handlePan:(UIPanGestureRecognizer *)recognizer
 {
@@ -270,20 +271,22 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     }
     
     if ([[self.topView valueForKeyPath:@"transform.rotation.x"] floatValue] < -M_PI_2) {
-        self.backGradientLayer.opacity = 0.3f;
-        self.backImageLayer.opacity=1.0f;
+        
         [CATransaction begin];
         [CATransaction setValue:(id)kCFBooleanTrue
                          forKey:kCATransactionDisableActions];
+        self.backGradientLayer.opacity = 0.3f;
+        self.backImageLayer.opacity=1.0f;
         self.topShadowLayer.opacity = 0.0;
         self.bottomShadowLayer.opacity = (location.y-self.initialLocation)/(CGRectGetHeight(self.bounds)-self.initialLocation);
         [CATransaction commit];
     } else {
-        self.backGradientLayer.opacity = 0.0f;
-        self.backImageLayer.opacity=0.0f;
+        
         [CATransaction begin];
         [CATransaction setValue:(id)kCFBooleanTrue
                          forKey:kCATransactionDisableActions];
+        self.backGradientLayer.opacity = 0.0f;
+        self.backImageLayer.opacity=0.0f;
         CGFloat opacity = (location.y-self.initialLocation)/(CGRectGetHeight(self.bounds)-self.initialLocation);
         self.bottomShadowLayer.opacity = opacity;
         self.topShadowLayer.opacity = opacity;
@@ -319,6 +322,7 @@ typedef NS_ENUM(NSInteger, LayerSection) {
         }
     }
 }
+
 -(void)animateViewWithRotation:(CGFloat)angle translation:(CGFloat)startingpoint verticalPoint:(CGFloat)verticalPoint{
     POPBasicAnimation *rotationAnimation = [POPBasicAnimation animationWithPropertyNamed:kPOPLayerRotationX];
     POPBasicAnimation *scaleAnimation=[POPBasicAnimation animationWithPropertyNamed:kPOPLayerScaleXY];
@@ -450,7 +454,6 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     rotationAnimation.delegate = self;
     [self.topView pop_addAnimation:rotationAnimation forKey:@"rotationAnimation"];
 }
-
 - (CATransform3D)transform3D
 {
     CATransform3D transform = CATransform3DIdentity;
@@ -485,6 +488,11 @@ typedef NS_ENUM(NSInteger, LayerSection) {
 - (void)pop_animationDidApply:(POPAnimation *)anim
 {
     self.angle=(-([[self.topView valueForKeyPath:@"transform.rotation.x"]floatValue]*(180.0f/M_PI)));
+    if (self.angle > 90.0f){
+        self.backImageLayer.opacity=1.0f;
+    }else{
+        self.backImageLayer.opacity=0.0f;
+    }
 }
 
 @end
