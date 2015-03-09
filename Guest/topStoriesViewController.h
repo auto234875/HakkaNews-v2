@@ -8,7 +8,7 @@
 #import <UIKit/UIKit.h>
 @interface topStoriesViewController : UIViewController
 @property (nonatomic, strong) NSMutableArray *currentPosts;
-@property (nonatomic, strong) NSString *postType;
+@property (nonatomic) NSUInteger postType;
 @property(nonatomic)BOOL reloadStories;
 @property(nonatomic)BOOL limitReached;
 -(void)getStories;

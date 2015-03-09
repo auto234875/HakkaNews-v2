@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3704D0F6EC0DCC4DAAA7DC69"
+               BlueprintIdentifier = "C648BFD470ECCE871B200540"
                BuildableName = "libPods-MCFireworksButton.a"
                BlueprintName = "Pods-MCFireworksButton"
                ReferencedContainer = "container:Pods.xcodeproj">

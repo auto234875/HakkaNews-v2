@@ -1,11 +1,11 @@
 PODS:
-  - Colours (5.5.0)
-  - libHN (3.0.1)
+  - Colours (5.6.1)
+  - libHN (4.0.2)
   - MCFireworksButton (0.1)
-  - PocketAPI (1.0.2)
+  - PocketAPI (1.0.3)
   - pop (1.0.7)
   - Shimmer (1.0.2)
-  - TUSafariActivity (1.0.2)
+  - TUSafariActivity (1.0.3)
 
 DEPENDENCIES:
   - Colours
@@ -17,12 +17,12 @@ DEPENDENCIES:
   - TUSafariActivity (~> 1.0.1)
 
 SPEC CHECKSUMS:
-  Colours: 7abeb0fdebe2da3d8bd7305aee0798375f51f5d8
-  libHN: 81e4b7b4de568e42a224190549f940ad28fe5b32
+  Colours: ecbcbb168f7e6190b76b34df1b477c103cb638eb
+  libHN: 243997619c679e20e5e7f78b1d7e4ca37745bfb1
   MCFireworksButton: b0b3ba6776ddf271cd82c2a3c235c3ca866738f1
-  PocketAPI: 801df1a3cdd094e5477add10c80dceb533c98a66
+  PocketAPI: c83bd3fc1916d5acab274efeb90171ba1184265d
   pop: 2f14a1ea61339767af9e66741b418c831b3844df
   Shimmer: 057fcfe9c1c978d69d50b64fce93a61080cd08ec
-  TUSafariActivity: 63c6b0584d1f0a731e955c0e4d9c89cde63bedc2
+  TUSafariActivity: b018d765166c238e96cc9586bf393b1b7c2fc7a7
 
 COCOAPODS: 0.35.0

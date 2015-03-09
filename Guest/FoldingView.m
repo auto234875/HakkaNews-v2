@@ -489,9 +489,20 @@ typedef NS_ENUM(NSInteger, LayerSection) {
 {
     self.angle=(-([[self.topView valueForKeyPath:@"transform.rotation.x"]floatValue]*(180.0f/M_PI)));
     if (self.angle > 90.0f){
+        [CATransaction begin];
+        [CATransaction setValue:(id)kCFBooleanTrue
+                         forKey:kCATransactionDisableActions];
         self.backImageLayer.opacity=1.0f;
+        [CATransaction commit];
+
+        
     }else{
+        [CATransaction begin];
+        [CATransaction setValue:(id)kCFBooleanTrue
+                         forKey:kCATransactionDisableActions];
         self.backImageLayer.opacity=0.0f;
+        [CATransaction commit];
+        
     }
 }
 

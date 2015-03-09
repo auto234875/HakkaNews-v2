@@ -5,7 +5,7 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>FF59A0A1-0975-4F7E-A3BB-3034BD6579C3</string>
+	<string>8176D49D-B2EC-47D1-B717-0DC933FE8B5C</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Guest</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
@@ -14,11 +14,11 @@
 		<string>https://github.com/auto234875/Guest.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Guest.xcworkspace</string>
+	<string>Guest.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>21BB1D22E716140727849D1D6F890375CE8E9A2C</key>
-		<string>..</string>
+		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/auto234875/Guest.git</string>

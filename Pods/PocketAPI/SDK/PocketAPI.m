@@ -390,7 +390,7 @@ static PocketAPI *sSharedAPI = nil;
 	operation.delegate = delegate;
 	operation.APIMethod = APIMethod;
 	operation.HTTPMethod = HTTPMethod;
-	operation.arguments = arguments;
+	operation.arguments = [NSDictionary dictionaryWithDictionary:arguments];
 	return operation;
 }
 
@@ -672,13 +672,9 @@ static PocketAPI *sSharedAPI = nil;
 #if TARGET_OS_IPHONE
 	return [[UIDevice currentDevice] systemVersion];
 #else
-	SInt32 versionMajor = 0;
-	SInt32 versionMinor = 0;
-	SInt32 versionBugFix = 0;
-	Gestalt( gestaltSystemVersionMajor, &versionMajor );
-	Gestalt( gestaltSystemVersionMinor, &versionMinor );
-	Gestalt( gestaltSystemVersionBugFix, &versionBugFix );
-	return [NSString stringWithFormat:@"%d.%d.%d", versionMajor, versionMinor, versionBugFix];
+    // Gestalt is deprecated in 10.8 with no sane replacement API. This is the currently recommended solution.
+    // via http://stackoverflow.com/questions/11072804/mac-os-x-10-8-replacement-for-gestalt-for-testing-os-version-at-runtime/11072974
+    return [[NSDictionary dictionaryWithContentsOfFile:@"/System/Library/CoreServices/SystemVersion.plist"] objectForKey:@"ProductVersion"];
 #endif
 }
 
@@ -687,7 +683,7 @@ static PocketAPI *sSharedAPI = nil;
 #pragma mark Keychain Credentials
 
 #import <TargetConditionals.h>
-#import "SFHFKeychainUtils.h"
+#import "PocketAPIKeychainUtils.h"
 
 @implementation PocketAPI (Credentials)
 
@@ -704,13 +700,13 @@ static PocketAPI *sSharedAPI = nil;
 #if TARGET_IPHONE_SIMULATOR || (DEBUG && !TARGET_OS_IPHONE && TARGET_OS_MAC)
 		[[NSUserDefaults standardUserDefaults] setObject:value forKey:[NSString stringWithFormat:@"%@.%@", serviceName, key]];
 #else
-		[SFHFKeychainUtils storeUsername:key andPassword:value forServiceName:serviceName updateExisting:YES error:nil];
+		[PocketAPIKeychainUtils storeUsername:key andPassword:value forServiceName:serviceName updateExisting:YES error:nil];
 #endif
 	}else{
 #if TARGET_IPHONE_SIMULATOR || (DEBUG && !TARGET_OS_IPHONE && TARGET_OS_MAC)
 		[[NSUserDefaults standardUserDefaults] removeObjectForKey:[NSString stringWithFormat:@"%@.%@", serviceName, key]];
 #else
-		[SFHFKeychainUtils deleteItemForUsername:key andServiceName:serviceName error:nil];
+		[PocketAPIKeychainUtils deleteItemForUsername:key andServiceName:serviceName error:nil];
 #endif
 	}
 }
@@ -719,7 +715,7 @@ static PocketAPI *sSharedAPI = nil;
 #if TARGET_IPHONE_SIMULATOR || (DEBUG && !TARGET_OS_IPHONE && TARGET_OS_MAC)
 	return [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@.%@", serviceName, key]];
 #else
-	return [SFHFKeychainUtils getPasswordForUsername:key andServiceName:serviceName error:nil];
+	return [PocketAPIKeychainUtils getPasswordForUsername:key andServiceName:serviceName error:nil];
 #endif
 }
 

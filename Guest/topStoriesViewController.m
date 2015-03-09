@@ -27,9 +27,6 @@
 @property(strong,nonatomic)UITableView *tableView;
 @property(nonatomic,strong)UIButton *menuButton;
 @property(nonatomic,strong)UIImageView *menuImage;
-@property(nonatomic,strong)UIButton *topButton;
-@property(nonatomic,strong)UIButton *nButton;
-@property(nonatomic,strong)UIButton *askButton;
 @property(nonatomic,strong)CALayer *topView;
 @property(nonatomic,strong)CALayer *bottomView;
 @property(nonatomic,strong)CATransformLayer *scaleNTranslationLayer;
@@ -40,13 +37,106 @@
 @property(nonatomic,strong)CALayer *backImageLayer;
 @property(nonatomic,strong)CALayer *avatarLayer;
 @property(nonatomic,strong)CAGradientLayer *backGradientLayer;
+@property(nonatomic,strong)UIButton *topStoriesButton;
+@property(nonatomic,strong)UIButton *askStoriesButton;
+@property(nonatomic,strong)UIButton *nStoriesButton;
+@property(nonatomic,strong)UIButton *bestStoriesButton;
+@property(nonatomic,strong)CALayer *buttonTopBorder;
+@property(nonatomic,strong)CALayer *buttonTopColoredBorder;
 @end
 @implementation topStoriesViewController
 #define postTitlePadding 15
 #define tableViewTag 23
+#define kButtonHeight 44
+#define kButtonWidth (self.view.bounds.size.width/4)
+#define kButtonYPostion (self.view.bounds.size.height-kButtonHeight)
+#define kButton1XPostion 0
+#define kButton2XPostion (self.view.bounds.size.width-(kButtonWidth*3))
+#define kButton3XPostion (self.view.bounds.size.width-(kButtonWidth*2))
+#define kButton4XPostion (self.view.bounds.size.width-kButtonWidth)
+#define kButtonTopBorderHeight 0.3f
+-(void)createTabBarButtons{
+    self.topStoriesButton=[[UIButton alloc] initWithFrame:CGRectMake(kButton1XPostion, kButtonYPostion, kButtonWidth, kButtonHeight)];
+    self.nStoriesButton=[[UIButton alloc] initWithFrame:CGRectMake(kButton2XPostion, kButtonYPostion, kButtonWidth, kButtonHeight)];
+    self.askStoriesButton=[[UIButton alloc] initWithFrame:CGRectMake(kButton4XPostion, kButtonYPostion, kButtonWidth, kButtonHeight)];
+    self.bestStoriesButton=[[UIButton alloc] initWithFrame:CGRectMake(kButton3XPostion, kButtonYPostion, kButtonWidth, kButtonHeight)];
+    self.buttonTopBorder=[CALayer layer];
+    self.buttonTopBorder.frame=CGRectMake(self.view.bounds.origin.x, self.view.bounds.size.height-44.3, self.view.bounds.size.width, kButtonTopBorderHeight);
+    self.buttonTopBorder.backgroundColor=[UIColor grayColor].CGColor;
+    self.buttonTopColoredBorder = [CALayer layer];
+    self.buttonTopColoredBorder.frame=CGRectMake(self.buttonTopColoredBorder.superlayer.bounds.origin.x, self.buttonTopColoredBorder.superlayer.bounds.origin.y,kButtonWidth, 3.0f);
+    self.buttonTopColoredBorder.backgroundColor=[UIColor turquoiseColor].CGColor;
+    [self setupStoriesButton];
+    [self.view addSubview:self.topStoriesButton];
+    [self.view addSubview:self.nStoriesButton];
+    [self.view addSubview:self.bestStoriesButton];
+    [self.view addSubview:self.askStoriesButton];
+    [self.view.layer addSublayer:self.buttonTopBorder];
+    [self.topStoriesButton.layer addSublayer:self.buttonTopColoredBorder];
+}
+-(void)setupStoriesButton{
+    self.topStoriesButton.backgroundColor=[UIColor snowColor];
+    self.nStoriesButton.backgroundColor=[UIColor snowColor];
+    self.bestStoriesButton.backgroundColor=[UIColor snowColor];
+    self.askStoriesButton.backgroundColor=[UIColor snowColor];
+    self.topStoriesButton.layer.borderWidth=0;
+    self.nStoriesButton.layer.borderWidth=0;
+    self.bestStoriesButton.layer.borderWidth=0;
+    self.askStoriesButton.layer.borderWidth=0;
+    self.topStoriesButton.tag=0;
+    self.nStoriesButton.tag=1;
+    self.bestStoriesButton.tag=2;
+    self.askStoriesButton.tag=3;
+    [self.topStoriesButton setTitle:@"T" forState:UIControlStateNormal];
+    self.topStoriesButton.titleLabel.font=[UIFont fontWithName:@"HelveticaNeue" size:15];
+    [self.topStoriesButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [self.nStoriesButton setTitle:@"N" forState:UIControlStateNormal];
+    self.nStoriesButton.titleLabel.font=[UIFont fontWithName:@"HelveticaNeue" size:15];
+    [self.nStoriesButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [self.bestStoriesButton setTitle:@"B" forState:UIControlStateNormal];
+    self.bestStoriesButton.titleLabel.font=[UIFont fontWithName:@"HelveticaNeue" size:15];
+    [self.bestStoriesButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [self.askStoriesButton setTitle:@"A" forState:UIControlStateNormal];
+    self.askStoriesButton.titleLabel.font=[UIFont fontWithName:@"HelveticaNeue" size:15];
+    [self.askStoriesButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [self.topStoriesButton addTarget:self action:@selector(storiesButtonPressed:) forControlEvents:UIControlEventTouchDown];
+    [self.nStoriesButton addTarget:self action:@selector(storiesButtonPressed:) forControlEvents:UIControlEventTouchDown];
+    [self.bestStoriesButton addTarget:self action:@selector(storiesButtonPressed:) forControlEvents:UIControlEventTouchDown];
+    [self.askStoriesButton addTarget:self action:@selector(storiesButtonPressed:) forControlEvents:UIControlEventTouchDown];
+
+}
+-(void)resetStoriesButtonColor{
+    [self.topStoriesButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [self.nStoriesButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [self.bestStoriesButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [self.askStoriesButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+
+    switch (self.postType) {
+        case 0:
+            [self.topStoriesButton setTitleColor:[UIColor turquoiseColor] forState:UIControlStateNormal];
+            break;
+        case 1:
+            [self.nStoriesButton setTitleColor:[UIColor turquoiseColor] forState:UIControlStateNormal];
+            break;
+        case 2:
+            [self.bestStoriesButton setTitleColor:[UIColor turquoiseColor] forState:UIControlStateNormal];
+            break;
+        case 3:
+            [self.askStoriesButton setTitleColor:[UIColor turquoiseColor] forState:UIControlStateNormal];
+            break;
+    }
+}
+-(void)storiesButtonPressed:(UIButton*)sender{
+    if (self.buttonTopColoredBorder.superlayer!=sender.layer) {
+        [self.buttonTopColoredBorder removeFromSuperlayer];
+    }
+    self.postType=sender.tag;
+    [self getStories];
+    [sender.layer addSublayer:self.buttonTopColoredBorder];
+}
 -(UITableView*)tableView{
     if (!_tableView) {
-        _tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height) style:UITableViewStylePlain];
+        _tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-44) style:UITableViewStylePlain];
         _tableView.delegate=self;
         _tableView.dataSource=self;
         _tableView.tag=tableViewTag;
@@ -121,7 +211,7 @@
     [self initialUserSetup];
     [self retrieveListofReadPost];
     [self retrieveListofUpvote];
-    self.postType=@"New";
+    self.postType=0;
     [self getStories];
     self.tableView.backgroundColor=[UIColor snowColor];
     self.tableView.delaysContentTouches=NO;
@@ -129,13 +219,14 @@
     self.tableView.tag=1;
     self.loadingLayer=[FBShimmeringLayer layer];
     self.loadingLayer.frame=CGRectMake(0,0, self.view.bounds.size.width, 5);
-    UIButton *loginButton=[[UIButton alloc] initWithFrame:CGRectMake(15, 15, 44, 44)];
-    [loginButton setBackgroundImage:[UIImage imageNamed:@"action" ] forState:UIControlStateNormal];
-    [loginButton addTarget:self action:@selector(showLogin) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:loginButton];
+    [self createTabBarButtons];
+    //UIButton *loginButton=[[UIButton alloc] initWithFrame:CGRectMake(15, 15, 44, 44)];
+    //[loginButton setBackgroundImage:[UIImage imageNamed:@"action" ] forState:UIControlStateNormal];
+    //[loginButton addTarget:self action:@selector(showLogin) forControlEvents:UIControlEventTouchUpInside];
+    //[self.view addSubview:loginButton];
     CALayer *layer=[CALayer layer];
     layer.frame=self.loadingLayer.bounds;
-    layer.backgroundColor=[UIColor redColor].CGColor;
+    layer.backgroundColor=[UIColor turquoiseColor].CGColor;
     self.loadingLayer.contentLayer=layer;
     self.loadingLayer.shimmering=YES;
     [self.view.layer addSublayer:self.loadingLayer];
@@ -144,22 +235,7 @@
     LoginVC *login=[[LoginVC alloc] init];
     [self presentViewController:login animated:YES completion:nil];
 }
--(void)getBestStories{
-    self.postType=@"Best";
-    [self getStories];
-}
--(void)getAskStories{
-    self.postType=@"Ask";
-    [self getStories];
-}
--(void)getTopStories{
-    self.postType=@"Top";
-    [self getStories];
-}
--(void)getNewStories{
-    self.postType=@"New";
-    [self getStories];
-}
+
 -(void)setupLoggedIn{
     
     self.userIsLoggedIn=YES;
@@ -180,7 +256,7 @@
 }
 - (void)getStories {
     [self turnOnShimmeringLayer];
-    if ([self.postType isEqualToString:@"Top"]) {
+    if (self.postType==0) {
         [[HNManager sharedManager] loadPostsWithFilter:PostFilterTypeTop completion:^(NSArray *posts, NSString *urlAddition){
             if (posts) {
                 self.currentPosts = [NSMutableArray arrayWithArray:posts];
@@ -192,7 +268,7 @@
             }
         }];
     }
-    else if ([self.postType isEqualToString:@"New"]) {
+    else if (self.postType==1) {
         [[HNManager sharedManager] loadPostsWithFilter:PostFilterTypeNew completion:^(NSArray *posts, NSString *urlAddition){
             if (posts) {
                 self.currentPosts = [NSMutableArray arrayWithArray:posts];
@@ -204,7 +280,7 @@
             }
         }];
     }
-    else if ([self.postType isEqualToString:@"Best"]) {
+    else if (self.postType==2) {
         [[HNManager sharedManager] loadPostsWithFilter:PostFilterTypeBest completion:^(NSArray *posts, NSString *urlAddition){
             if (posts) {
                 self.currentPosts = [NSMutableArray arrayWithArray:posts];
@@ -216,7 +292,7 @@
             }
         }];
     }
-    else if ([self.postType isEqualToString:@"Ask"]) {
+    else if (self.postType==3) {
         [[HNManager sharedManager] loadPostsWithFilter:PostFilterTypeAsk completion:^(NSArray *posts, NSString *urlAddition){
             if (posts) {
                 self.currentPosts = [NSMutableArray arrayWithArray:posts];
@@ -228,7 +304,7 @@
             }
         }];
     }
-    else if ([self.postType isEqualToString:@"Jobs"]) {
+    else if (self.postType==4) {
         [[HNManager sharedManager] loadPostsWithFilter:PostFilterTypeJobs completion:^(NSArray *posts, NSString *urlAddition){
             if (posts) {
                 self.currentPosts = [NSMutableArray arrayWithArray:posts];
@@ -241,6 +317,7 @@
         }];
     }
     [self scrollToTopOfTableView];
+    [self resetStoriesButtonColor];
 }
 - (void)scrollToTopOfTableView {
     self.tableView.contentOffset = CGPointMake(0, 0 - self.tableView.contentInset.top);
@@ -439,6 +516,13 @@
         if (finished){
             [self.view addSubview:cvcView];
             self.view.userInteractionEnabled=YES;
+            [self.backImageLayer removeFromSuperlayer];
+            [self.backGradientLayer removeFromSuperlayer];
+            [self.bottomShadowLayer removeFromSuperlayer];
+            [self.topShadowLayer removeFromSuperlayer];
+            [self.avatarLayer removeFromSuperlayer];
+            [self.imprintLayer1 removeFromSuperlayer];
+            [self.imprintLayer2 removeFromSuperlayer];
             [self.scaleNTranslationLayer removeFromSuperlayer];
             [self.topView removeFromSuperlayer];
             [self.bottomView removeFromSuperlayer];
@@ -457,6 +541,13 @@
         if (finished){
             [self.view addSubview:foldView];
             self.view.userInteractionEnabled=YES;
+            [self.backImageLayer removeFromSuperlayer];
+            [self.backGradientLayer removeFromSuperlayer];
+            [self.bottomShadowLayer removeFromSuperlayer];
+            [self.topShadowLayer removeFromSuperlayer];
+            [self.avatarLayer removeFromSuperlayer];
+            [self.imprintLayer1 removeFromSuperlayer];
+            [self.imprintLayer2 removeFromSuperlayer];
             [self.scaleNTranslationLayer removeFromSuperlayer];
             [self.topView removeFromSuperlayer];
             [self.bottomView removeFromSuperlayer];
@@ -546,7 +637,7 @@ typedef void(^myCompletion)(BOOL);
    [self.topView addSublayer:self.topShadowLayer];
     [self.topView addSublayer:self.backImageLayer];
     [self.backImageLayer addSublayer:self.avatarLayer];
-    [self.backImageLayer addSublayer:self.backGradientLayer];
+    //[self.backImageLayer addSublayer:self.backGradientLayer];
     [self.scaleNTranslationLayer addSublayer:self.topView];
 }
 - (void)addBottomView
@@ -628,7 +719,7 @@ typedef void(^myCompletion)(BOOL);
     }
     return _backImageLayer;
 }
--(CAGradientLayer*)backGradientLayer{
+/*-(CAGradientLayer*)backGradientLayer{
     if (!_backGradientLayer) {
         _backGradientLayer=[CAGradientLayer layer];
         _backGradientLayer.frame=self.topView.bounds;
@@ -638,7 +729,7 @@ typedef void(^myCompletion)(BOOL);
         _backGradientLayer.endPoint=CGPointMake(1, 1);
     }
     return _backGradientLayer;
-}
+}*/
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *) cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([tableView respondsToSelector:@selector(setSeparatorInset:)]) {
@@ -656,7 +747,7 @@ typedef void(^myCompletion)(BOOL);
     //Displaying the last cell, so we will load more stories
     if(indexPath.row == [self.currentPosts count] - 1){
            if (self.limitReached==NO) {
-           if (![self.postType isEqualToString:@"Jobs"]){
+           if (!self.postType==4){
                //loading more stories
                //start loading animation
         [[HNManager sharedManager] loadPostsWithUrlAddition:[[HNManager sharedManager] postUrlAddition] completion:^(NSArray *posts, NSString *urlAddition) {
@@ -687,11 +778,7 @@ typedef void(^myCompletion)(BOOL);
         self.bottomShadowLayer.opacity = 0.5f;
         self.topShadowLayer.opacity = 0.5f;
         [CATransaction commit];
-        CGFloat shineGradientFactor=angle*0.02071429f;
-        [CATransaction begin];
-        [CATransaction setValue:@0.016f forKey:kCATransactionAnimationDuration];
-        self.backGradientLayer.locations=@[[NSNumber numberWithFloat:-2.45f+shineGradientFactor],[NSNumber numberWithFloat:-2.4f+shineGradientFactor],[NSNumber numberWithFloat:-2.34f+shineGradientFactor],[NSNumber numberWithFloat:-2.09f+shineGradientFactor],[NSNumber numberWithFloat:-2.05f+shineGradientFactor],[NSNumber numberWithFloat:-2.0f+shineGradientFactor]];
-        [CATransaction commit];
+
     }else{
      [CATransaction begin];
      [CATransaction setValue:(id)kCFBooleanTrue

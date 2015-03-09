@@ -114,7 +114,7 @@ NSString *PocketAPINameForHTTPMethod(PocketAPIHTTPMethod method){
 }
 
 -(NSString *)description{
-	return [NSString stringWithFormat:@"<%@: %p https://%@%@ %@>", [self class], self, self.baseURLPath, self.APIMethod, self.arguments];
+	return [NSString stringWithFormat:@"<%@: %p https://%@/%@ %@>", [self class], self, self.baseURLPath, self.APIMethod, self.arguments];
 }
 
 -(NSString *)baseURLPath{
@@ -279,6 +279,10 @@ NSString *PocketAPINameForHTTPMethod(PocketAPIHTTPMethod method){
 
 -(void)pocketAPILoggedIn:(PocketAPI *)api{
 	[[self.API operationQueue] addOperation:[[self copy] autorelease]];
+    
+    // Copy of the current operation is scheduled on the operationQueue, so we have to
+    // mark the current operation as finished to let it be removed from the operationQueue.
+    [self pkt_connectionFinishedLoading];
 }
 
 -(void)pocketAPI:(PocketAPI *)api hadLoginError:(NSError *)theError{
@@ -404,7 +408,14 @@ NSString *PocketAPINameForHTTPMethod(PocketAPIHTTPMethod method){
 -(NSString *)pkt_URLEncodedFormString{
 	NSMutableArray *formPieces = [NSMutableArray arrayWithCapacity:self.allKeys.count];
 	for(NSString *key in self.allKeys){
-		NSString *value = [self objectForKey:key];
+        NSString *value = [self objectForKey:key];
+        if(![value isKindOfClass:[NSString class]]){
+            if([value respondsToSelector:@selector(stringValue)]){
+                value = [(id)value stringValue];
+            }else{
+                value = [value description];
+            }
+        }
 		[formPieces addObject:[NSString stringWithFormat:@"%@=%@", [PocketAPIOperation encodeForURL:key], [PocketAPIOperation encodeForURL:value]]];
 	}
 	return [formPieces componentsJoinedByString:@"&"];

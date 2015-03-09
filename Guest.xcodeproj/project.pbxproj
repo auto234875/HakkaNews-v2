@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		521E2C531AAD0BF0006CC0B6 /* Inconsolata.otf in Resources */ = {isa = PBXBuildFile; fileRef = 521E2C521AAD0BF0006CC0B6 /* Inconsolata.otf */; };
 		52EE4D5B1A2F9733004A6C09 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D5A1A2F9733004A6C09 /* main.m */; };
 		52EE4D661A2F9733004A6C09 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52EE4D651A2F9733004A6C09 /* Images.xcassets */; };
 		52EE4D751A2F9733004A6C09 /* GuestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D741A2F9733004A6C09 /* GuestTests.m */; };
@@ -45,6 +46,7 @@
 
 /* Begin PBXFileReference section */
 		1A062B5F61AB0AC6DF2D73B2 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		521E2C521AAD0BF0006CC0B6 /* Inconsolata.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Inconsolata.otf; sourceTree = "<group>"; };
 		52EE4D551A2F9733004A6C09 /* Guest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Guest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52EE4D591A2F9733004A6C09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		52EE4D5A1A2F9733004A6C09 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 		52EE4D4C1A2F9733004A6C09 = {
 			isa = PBXGroup;
 			children = (
+				521E2C521AAD0BF0006CC0B6 /* Inconsolata.otf */,
 				52EE4D571A2F9733004A6C09 /* Guest */,
 				52EE4D711A2F9733004A6C09 /* GuestTests */,
 				52EE4D561A2F9733004A6C09 /* Products */,
@@ -303,6 +306,7 @@
 			files = (
 				52EE4D661A2F9733004A6C09 /* Images.xcassets in Resources */,
 				52EE4DB21A2F9D85004A6C09 /* Launch Screen.xib in Resources */,
+				521E2C531AAD0BF0006CC0B6 /* Inconsolata.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
