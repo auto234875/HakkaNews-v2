@@ -8,6 +8,7 @@
 
 #import "FoldingWebView.h"
 #import <WebKit/WebKit.h>
+#import  <Colours/Colours.h>
 @interface FoldingWebView()<WKNavigationDelegate,UIScrollViewDelegate,UIGestureRecognizerDelegate>
 @property(nonatomic,strong)UIButton *backButton;
 @property(nonatomic,strong)UIButton *forwardButton;
@@ -87,7 +88,7 @@
         _progressView.progressViewStyle=UIProgressViewStyleBar;
         _progressView.alpha=0.4f;
         _webView.navigationDelegate=self;
-        _progressView.tintColor=[UIColor blackColor];
+        _progressView.tintColor=[UIColor turquoiseColor];
         _progressView.trackTintColor=[UIColor lightGrayColor];
         [_webView addSubview:_progressView];
         [_webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:NULL];

@@ -11,6 +11,7 @@
 #import <Colours/Colours.h>
 #import "UIImage+ImageEffects.h"
 #import <FBShimmeringLayer.h>
+#import "UIImage+MDQRCode.h"
 
 typedef NS_ENUM(NSInteger, LayerSection) {
     LayerSectionTop,
@@ -44,6 +45,8 @@ typedef NS_ENUM(NSInteger, LayerSection) {
 @property(nonatomic,strong)UIImage *superViewImage;
 @property(nonatomic,readwrite)UIPanGestureRecognizer *foldGestureRecognizer;
 @property(nonatomic,strong)CALayer *avatarLayer;
+@property(nonatomic,strong)CATextLayer *backTextLayer;
+@property(nonatomic,strong)CATextLayer *backBottomTextLayer;
 
 @end
 
@@ -116,8 +119,8 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     self.topView.backgroundColor=[UIColor whiteColor].CGColor;
     self.topView.opaque=YES;
     self.topView.allowsEdgeAntialiasing=YES;
-    //self.topView.shadowColor=[UIColor whiteColor].CGColor;
-    //self.topView.shadowOpacity = 0.01f;
+    self.topView.shadowColor=[UIColor whiteColor].CGColor;
+    self.topView.shadowOpacity = 0.01f;
     self.topView.transform = [self transform3D];
     self.topView.contentsScale=[UIScreen mainScreen].scale;
     self.topView.frame=CGRectMake(0.0f,
@@ -130,7 +133,9 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     self.backImageLayer.opacity=0.0;
     self.backGradientLayer.opacity = 0.0;
    [self.topView addSublayer:self.backImageLayer];
-    [self.backImageLayer addSublayer:self.avatarLayer];
+    //[self.backImageLayer addSublayer:self.backTextLayer];
+    [self.backImageLayer addSublayer:self.backBottomTextLayer];
+    //[self.backImageLayer addSublayer:self.avatarLayer];
     [self.backImageLayer addSublayer:self.backGradientLayer];
 
     [self.topView addSublayer:self.topShadowLayer];
@@ -140,13 +145,11 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     if (!_avatarLayer) {
         _avatarLayer=[CALayer layer];
         _avatarLayer.contentsScale=[UIScreen mainScreen].scale;
-        _avatarLayer.contents=(__bridge id)[UIImage imageNamed:@"avatar"].CGImage;
-        _avatarLayer.frame=CGRectMake(self.backImageLayer.bounds.size.width-115.0f, self.backImageLayer.bounds.size.height-115.0f, 100.0f, 100.0f);
+        _avatarLayer.contents=(__bridge id)[UIImage mdQRCodeForString:@"1HN1337CTXSBu3vf9fbFWV7k8PvjXLxxpr" size:100.0f fillColor:[UIColor whiteColor]].CGImage;
+        _avatarLayer.frame=CGRectMake((self.backImageLayer.bounds.size.width/2.0f)-50.0f, self.backBottomTextLayer.bounds.origin.y+self.backBottomTextLayer.bounds.size.height+60.0f, 100.0f, 100.0f);
         CATransform3D  rot2 = CATransform3DMakeRotation(M_PI, -1.0f, 0.f, 0.f);
         _avatarLayer.transform=rot2;
-        _avatarLayer.cornerRadius=50.0f;
-        _avatarLayer.borderWidth=0.5f;
-        _avatarLayer.borderColor=[UIColor whiteColor].CGColor;
+        
         _avatarLayer.masksToBounds=YES;
     }
     return _avatarLayer;
@@ -155,6 +158,9 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     if (!_backImageLayer) {
         _backImageLayer=[CALayer layer];
         _backImageLayer.frame=self.topView.bounds;
+        _backImageLayer.contents=(__bridge id)[UIImage imageNamed:@"ad"].CGImage;
+        //_backImageLayer.contentsGravity=kCAGravityResizeAspect;
+
         _backImageLayer.opaque=YES;
     }
     return _backImageLayer;
@@ -170,27 +176,88 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     }
     return _backGradientLayer;
 }
-/*-(void)setupBackTextLayer{
-    self.backImageLayer=[CATextLayer layer];
-    self.backImageLayer.opacity=0.0;
-    self.backImageLayer.frame=self.topView.bounds;
-    self.backImageLayer.backgroundColor=[UIColor blackColor].CGColor;
-    self.backImageLayer.opaque=YES;
-    self.backImageLayer.foregroundColor=[UIColor whiteColor].CGColor;
-    self.backImageLayer.alignmentMode = kCAAlignmentCenter;
-    self.backImageLayer.contentsScale=[[UIScreen mainScreen] scale];
-    self.backImageLayer.allowsEdgeAntialiasing=YES;
-    UIFont *font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:30];
-    CFStringRef fontName = (__bridge CFStringRef)font.fontName;
-    CGFontRef fontRef = CGFontCreateWithFontName(fontName);
-    self.backImageLayer.font = fontRef;
-    self.backImageLayer.fontSize = font.pointSize;
-    CGFontRelease(fontRef);
-    NSString *text = @"\n\nJohn Smith\nauto234875@gmail.com\ngithub.com/auto234875";
-    CATransform3D  rot = CATransform3DMakeRotation(M_PI, 1, 0, 0);
-    self.backImageLayer.transform=rot;
-    self.backImageLayer.string = text;
+-(CATextLayer*)backTextLayer{
+    if (!_backTextLayer) {
+        NSString *text = @"Please help support this app by donating & leaving a review";
+        UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0f];
+        CGRect textSize = [text boundingRectWithSize:CGSizeMake(self.backImageLayer.bounds.size.width-30, self.backImageLayer.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0] } context:nil];
+        _backTextLayer=[CATextLayer layer];
+        _backTextLayer.opacity=0.0;
+        _backTextLayer.frame=CGRectMake((self.backImageLayer.bounds.size.width/2)-(textSize.size.width/2), self.backImageLayer.bounds.size.height - textSize.size.height- 15.0f, textSize.size.width,textSize.size.height);
+        _backTextLayer.backgroundColor=[UIColor blackColor].CGColor;
+        _backTextLayer.opaque=YES;
+        _backTextLayer.foregroundColor=[UIColor whiteColor].CGColor;
+        _backTextLayer.alignmentMode = kCAAlignmentCenter;
+        _backTextLayer.wrapped=YES;
+        _backTextLayer.contentsScale=[[UIScreen mainScreen] scale];
+        _backTextLayer.allowsEdgeAntialiasing=YES;
+        
+        CFStringRef fontName = (__bridge CFStringRef)font.fontName;
+        CGFontRef fontRef = CGFontCreateWithFontName(fontName);
+        _backTextLayer.font = fontRef;
+        _backTextLayer.fontSize = font.pointSize;
+        CGFontRelease(fontRef);
+        CATransform3D  rot = CATransform3DMakeRotation(M_PI, 1, 0, 0);
+        _backTextLayer.transform=rot;
+        _backTextLayer.string = text;
+    }
+    return _backTextLayer;
+}
+/*-(CATextLayer*)backBottomTextLayer{
+    if (!_backBottomTextLayer) {
+        NSString *text = @"1HN1337CTXSBu3vf9fbFWV7k8PvjXLxxpr";
+        UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0f];
+        CGRect textSize = [text boundingRectWithSize:CGSizeMake(self.backImageLayer.bounds.size.width-30, self.backImageLayer.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName : font } context:nil];
+        _backBottomTextLayer=[CATextLayer layer];
+        _backBottomTextLayer.opacity=0.0;
+        _backBottomTextLayer.frame=CGRectMake((self.backImageLayer.bounds.size.width/2)-(textSize.size.width/2), 15.0f, textSize.size.width,textSize.size.height);
+        _backBottomTextLayer.backgroundColor=[UIColor blackColor].CGColor;
+        _backBottomTextLayer.opaque=YES;
+        _backBottomTextLayer.foregroundColor=[UIColor whiteColor].CGColor;
+        _backBottomTextLayer.alignmentMode = kCAAlignmentCenter;
+        _backBottomTextLayer.wrapped=YES;
+        _backBottomTextLayer.contentsScale=[[UIScreen mainScreen] scale];
+        _backBottomTextLayer.allowsEdgeAntialiasing=YES;
+        
+        CFStringRef fontName = (__bridge CFStringRef)font.fontName;
+        CGFontRef fontRef = CGFontCreateWithFontName(fontName);
+        _backBottomTextLayer.font = fontRef;
+        _backBottomTextLayer.fontSize = font.pointSize;
+        CGFontRelease(fontRef);
+        CATransform3D  rot = CATransform3DMakeRotation(M_PI, 1, 0, 0);
+        _backBottomTextLayer.transform=rot;
+        _backBottomTextLayer.string = text;
+    }
+    return _backBottomTextLayer;
 }*/
+
+-(CATextLayer*)backBottomTextLayer{
+    if (!_backBottomTextLayer) {
+        NSString *text = @"@HakkaNews";
+        UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0f];
+        CGRect textSize = [text boundingRectWithSize:CGSizeMake(self.backImageLayer.bounds.size.width-30, self.backImageLayer.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName : font } context:nil];
+        _backBottomTextLayer=[CATextLayer layer];
+        _backBottomTextLayer.opacity=0.0;
+        _backBottomTextLayer.frame=CGRectMake(20, 20.0f, textSize.size.width,textSize.size.height);
+        _backBottomTextLayer.backgroundColor=[UIColor clearColor].CGColor;
+        _backBottomTextLayer.opaque=NO;
+        _backBottomTextLayer.foregroundColor=[UIColor crimsonColor].CGColor;
+        _backBottomTextLayer.alignmentMode = kCAAlignmentCenter;
+        _backBottomTextLayer.wrapped=YES;
+        _backBottomTextLayer.contentsScale=[[UIScreen mainScreen] scale];
+        _backBottomTextLayer.allowsEdgeAntialiasing=YES;
+        
+        CFStringRef fontName = (__bridge CFStringRef)font.fontName;
+        CGFontRef fontRef = CGFontCreateWithFontName(fontName);
+        _backBottomTextLayer.font = fontRef;
+        _backBottomTextLayer.fontSize = font.pointSize;
+        CGFontRelease(fontRef);
+        CATransform3D  rot = CATransform3DMakeRotation(M_PI, 1, 0, 0);
+        _backBottomTextLayer.transform=rot;
+        _backBottomTextLayer.string = text;
+    }
+    return _backBottomTextLayer;
+}
 - (void)addBottomView
 {
     self.bottomView=[CALayer layer];
@@ -277,6 +344,8 @@ typedef NS_ENUM(NSInteger, LayerSection) {
                          forKey:kCATransactionDisableActions];
         self.backGradientLayer.opacity = 0.3f;
         self.backImageLayer.opacity=1.0f;
+        self.backTextLayer.opacity=1.0f;
+        self.backBottomTextLayer.opacity=1.0f;
         self.topShadowLayer.opacity = 0.0;
         self.bottomShadowLayer.opacity = (location.y-self.initialLocation)/(CGRectGetHeight(self.bounds)-self.initialLocation);
         [CATransaction commit];
@@ -287,6 +356,8 @@ typedef NS_ENUM(NSInteger, LayerSection) {
                          forKey:kCATransactionDisableActions];
         self.backGradientLayer.opacity = 0.0f;
         self.backImageLayer.opacity=0.0f;
+        self.backTextLayer.opacity=0.0f;
+        self.backBottomTextLayer.opacity=0.0f;
         CGFloat opacity = (location.y-self.initialLocation)/(CGRectGetHeight(self.bounds)-self.initialLocation);
         self.bottomShadowLayer.opacity = opacity;
         self.topShadowLayer.opacity = opacity;
@@ -493,6 +564,7 @@ typedef NS_ENUM(NSInteger, LayerSection) {
         [CATransaction setValue:(id)kCFBooleanTrue
                          forKey:kCATransactionDisableActions];
         self.backImageLayer.opacity=1.0f;
+        
         [CATransaction commit];
 
         

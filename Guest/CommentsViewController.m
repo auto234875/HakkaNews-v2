@@ -14,6 +14,8 @@
 #import "replyVC.h"
 #import "topStoriesViewController.h"
 #import "FoldingTableView.h"
+#import "FBShimmeringLayer.h"
+
 @interface CommentsViewController ()<UIScrollViewDelegate,UIGestureRecognizerDelegate,UIActionSheetDelegate,FoldingViewDelegate,UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) NSMutableSet *commentID;
 @property (nonatomic, strong)UIRefreshControl *refreshControl;
@@ -22,20 +24,19 @@
 @property(nonatomic,strong)NSIndexPath *voteIndexPath;
 @property(strong,nonatomic)NSMutableArray *upvoteComment;
 @property(strong,nonatomic)NSMutableArray *downvoteComment;
-//@property(strong,nonatomic)FoldingTableView *foldingTableView;
+@property(strong,nonatomic)FBShimmeringLayer *loadingLayer;
 @end
 
 @implementation CommentsViewController
 @dynamic view;
-/*-(FoldingTableView*)foldingTableView{
-    if (!_foldingTableView) {
-        _foldingTableView=[[FoldingTableView alloc] initWithFrame:[UIScreen mainScreen].bounds style:UITableViewStylePlain];
-        _foldingTableView.tableView.delegate=self;
-        _foldingTableView.tableView.dataSource=self;
-        self.view=_foldingTableView;
-    }
-    return _foldingTableView;
-}*/
+-(void)turnOffShimmeringLayer{
+    self.loadingLayer.shimmering=NO;
+    self.loadingLayer.opacity=0.0;
+}
+-(void)turnOnShimmeringLayer{
+    self.loadingLayer.shimmering=YES;
+    self.loadingLayer.opacity=0.8;
+}
 -(void)loadView{
     self.view=[[FoldingTableView alloc] initWithFrame:[UIScreen mainScreen].bounds style:UITableViewStylePlain];
     ((FoldingTableView*)self.view).tableView.dataSource=self;
@@ -323,6 +324,17 @@
     [self retrieveListOfDownvoteComment];
     [self retrieveListOfUpvoteComment];
     [self initialUserSetup];
+    self.loadingLayer=[FBShimmeringLayer layer];
+    self.loadingLayer.frame=CGRectMake(0,0, self.view.bounds.size.width, 5);
+    self.loadingLayer.shimmeringOpacity=0.1f;
+    self.loadingLayer.shimmeringSpeed=300;
+    self.loadingLayer.shimmeringPauseDuration=0.1;
+    CALayer *layer=[CALayer layer];
+    layer.frame=self.loadingLayer.bounds;
+    layer.backgroundColor=[UIColor turquoiseColor].CGColor;
+    self.loadingLayer.contentLayer=layer;
+    [self.view.layer addSublayer:self.loadingLayer];
+
     [self reloadComments];
     [self initialUserSetup];
     [self setupTableViewBackgroundColor];
@@ -330,7 +342,7 @@
     [self setupFooterView];
 }
 - (void)reloadComments {
-    //ENABLE LOADING ANIMATION
+    [self turnOnShimmeringLayer];
     [[HNManager sharedManager] loadCommentsFromPost:self.replyPost completion:^(NSArray *comments) {
         if (comments){
             self.comments=comments;
@@ -338,10 +350,10 @@
             
             [((FoldingTableView*)self.view).tableView reloadData];
             self.navigationItem.title = self.title ;
-           //DISABLE LOADING ANIMATION
+            [self turnOffShimmeringLayer];
         }
         else{
-            //DISABLE LOADING ANIMATION
+            [self turnOffShimmeringLayer];
         }
     }];
 }

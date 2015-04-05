@@ -16,6 +16,8 @@
 #import "HNManager.h"
 #import <MCFireworksButton.h>
 #import "FoldingTableView.h"
+#import "UIImage+MDQRCode.h"
+#import "TUSafariActivity.h"
 @interface topStoriesViewController () <UIGestureRecognizerDelegate,POPAnimationDelegate,UIScrollViewDelegate,UIActionSheetDelegate,UITableViewDataSource,UITableViewDelegate,FoldingViewDelegate>
 @property (nonatomic, strong) NSMutableArray *readPost;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
@@ -43,6 +45,8 @@
 @property(nonatomic,strong)UIButton *bestStoriesButton;
 @property(nonatomic,strong)CALayer *buttonTopBorder;
 @property(nonatomic,strong)CALayer *buttonTopColoredBorder;
+@property(nonatomic,strong)CATextLayer *backTextLayer;
+@property(nonatomic,strong)CATextLayer *backBottomTextLayer;
 @end
 @implementation topStoriesViewController
 #define postTitlePadding 15
@@ -212,14 +216,17 @@
     [self retrieveListofReadPost];
     [self retrieveListofUpvote];
     self.postType=0;
-    [self getStories];
     self.tableView.backgroundColor=[UIColor snowColor];
     self.tableView.delaysContentTouches=NO;
     self.limitReached=NO;
     self.tableView.tag=1;
     self.loadingLayer=[FBShimmeringLayer layer];
     self.loadingLayer.frame=CGRectMake(0,0, self.view.bounds.size.width, 5);
+    self.loadingLayer.shimmeringOpacity=0.1f;
+    self.loadingLayer.shimmeringSpeed=300;
+    self.loadingLayer.shimmeringPauseDuration=0.1;
     [self createTabBarButtons];
+    [self getStories];
     //UIButton *loginButton=[[UIButton alloc] initWithFrame:CGRectMake(15, 15, 44, 44)];
     //[loginButton setBackgroundImage:[UIImage imageNamed:@"action" ] forState:UIControlStateNormal];
     //[loginButton addTarget:self action:@selector(showLogin) forControlEvents:UIControlEventTouchUpInside];
@@ -375,7 +382,7 @@
     cell.postDetail.tag=indexPath.row;
     cell.actionButton.frame=CGRectMake(5, cell.postTitle.frame.origin.y+cell.postTitle.frame.size.height+postTitlePadding, 44, 44);
     cell.likeButton.frame=CGRectMake(cell.actionButton.frame.origin.x+cell.actionButton.frame.size.width,cell.actionButton.frame.origin.y , 44, 44);
-    [cell.actionButton addTarget:self action:@selector(actionButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [cell.actionButton addTarget:self action:@selector(actionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     cell.postDetail.frame=CGRectMake((self.tableView.bounds.size.width/2)-15, cell.likeButton.frame.origin.y, (self.tableView.bounds.size.width/2), 44);
     [cell.postDetail addTarget:self action:@selector(postDetailButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [cell.postDetail setTitle:[NSString stringWithFormat:@"%i Points  %i Comments", post.Points, post.CommentCount]
@@ -450,8 +457,12 @@
     }];
     }
 }
--(void)actionButtonPressed{
-    NSLog(@"action");
+-(void)actionButtonPressed:(UIButton*)sender{
+        HNPost *post=[self.currentPosts objectAtIndex:sender.tag];
+        TUSafariActivity *openInSafari=[[TUSafariActivity alloc]init];
+        UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[post.UrlString] applicationActivities:@[openInSafari]];
+        activityController.excludedActivityTypes=@[UIActivityTypeAirDrop];
+        [self presentViewController:activityController animated:YES completion:nil];
 }
 - (void)configureCell:(postCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     HNPost *post=[self.currentPosts objectAtIndex:indexPath.row];
@@ -501,6 +512,19 @@
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
+-(void)clearSegueAnimation{
+    [self.backImageLayer removeFromSuperlayer];
+    [self.backGradientLayer removeFromSuperlayer];
+    [self.bottomShadowLayer removeFromSuperlayer];
+    [self.topShadowLayer removeFromSuperlayer];
+    [self.avatarLayer removeFromSuperlayer];
+    [self.imprintLayer1 removeFromSuperlayer];
+    [self.imprintLayer2 removeFromSuperlayer];
+    [self.scaleNTranslationLayer removeFromSuperlayer];
+    [self.topView removeFromSuperlayer];
+    [self.bottomView removeFromSuperlayer];
+    
+}
 -(void)showComment:(HNPost*)post indexPath:(NSIndexPath*)indexPath{
     [self saveTheListOfReadPost];
     [self deselectAndRefreshRowAtIndexPath:indexPath];
@@ -516,16 +540,7 @@
         if (finished){
             [self.view addSubview:cvcView];
             self.view.userInteractionEnabled=YES;
-            [self.backImageLayer removeFromSuperlayer];
-            [self.backGradientLayer removeFromSuperlayer];
-            [self.bottomShadowLayer removeFromSuperlayer];
-            [self.topShadowLayer removeFromSuperlayer];
-            [self.avatarLayer removeFromSuperlayer];
-            [self.imprintLayer1 removeFromSuperlayer];
-            [self.imprintLayer2 removeFromSuperlayer];
-            [self.scaleNTranslationLayer removeFromSuperlayer];
-            [self.topView removeFromSuperlayer];
-            [self.bottomView removeFromSuperlayer];
+            [self clearSegueAnimation];
         }
     }];
 }
@@ -541,20 +556,9 @@
         if (finished){
             [self.view addSubview:foldView];
             self.view.userInteractionEnabled=YES;
-            [self.backImageLayer removeFromSuperlayer];
-            [self.backGradientLayer removeFromSuperlayer];
-            [self.bottomShadowLayer removeFromSuperlayer];
-            [self.topShadowLayer removeFromSuperlayer];
-            [self.avatarLayer removeFromSuperlayer];
-            [self.imprintLayer1 removeFromSuperlayer];
-            [self.imprintLayer2 removeFromSuperlayer];
-            [self.scaleNTranslationLayer removeFromSuperlayer];
-            [self.topView removeFromSuperlayer];
-            [self.bottomView removeFromSuperlayer];
+            [self clearSegueAnimation];
         }
             }];
-
-   
 }
 typedef void(^myCompletion)(BOOL);
 
@@ -631,12 +635,20 @@ typedef void(^myCompletion)(BOOL);
                                   CGRectGetMidY(self.scaleNTranslationLayer.bounds));
     self.topView.anchorPoint = CGPointMake(0.5f, 1.0f);
     self.topView.position = CGPointMake(CGRectGetMidX(self.scaleNTranslationLayer.bounds), CGRectGetMidY(self.scaleNTranslationLayer.bounds));
+   //Since we are not lazy loading due to unresolved issues, we'll need to be careful about instantiating these layers as some of their properties are codependent
+    [self setupTopShadowLayer];
+    [self setupBackImageLayer];
+    //[self setupBackTextLayer];
+    [self setupBackBottomTextLayer];
+    //[self setupAvatarLayer];
     self.topShadowLayer.opacity=0;
     self.backImageLayer.opacity=1.0f;
-    self.backGradientLayer.opacity = 0.3f;
+    //self.backGradientLayer.opacity = 0.3f;
    [self.topView addSublayer:self.topShadowLayer];
     [self.topView addSublayer:self.backImageLayer];
-    [self.backImageLayer addSublayer:self.avatarLayer];
+    //[self.backImageLayer addSublayer:self.avatarLayer];
+    //[self.backImageLayer addSublayer:self.backTextLayer];
+    [self.backImageLayer addSublayer:self.backBottomTextLayer];
     //[self.backImageLayer addSublayer:self.backGradientLayer];
     [self.scaleNTranslationLayer addSublayer:self.topView];
 }
@@ -654,70 +666,100 @@ typedef void(^myCompletion)(BOOL);
     self.bottomView.shadowOpacity =0.85f ;
     self.bottomView.shadowRadius = 25.0f;
     [self.bottomView setShadowPath:[UIBezierPath bezierPathWithRect:CGRectMake(self.bottomView.bounds.origin.x, self.bottomView.bounds.origin.y+50, self.bottomView.bounds.size.width, self.bottomView.bounds.size.height-50)].CGPath];
+    [self setupImprintLayer1];
+    [self setupImprintLayer2];
+    [self setupBottomShadowLayer];
     [self.bottomView addSublayer:self.imprintLayer1];
     [self.bottomView addSublayer:self.imprintLayer2];
     self.bottomShadowLayer.opacity = 0;
     [self.bottomView addSublayer:self.bottomShadowLayer];
     [self.scaleNTranslationLayer addSublayer:self.bottomView];
 }
--(CALayer*)imprintLayer2{
-    if (!_imprintLayer2) {
-        _imprintLayer2=[CALayer layer];
-        _imprintLayer2.frame=CGRectMake(0, self.bottomView.bounds.origin.y+1.7f, self.bottomView.bounds.size.width, 0.3f);
-        _imprintLayer2.backgroundColor=[UIColor blackColor].CGColor;
-        _imprintLayer2.opacity=0.03f;
-    }
-    return _imprintLayer2;
+-(void)setupImprintLayer2{
+        self.imprintLayer2=[CALayer layer];
+        self.imprintLayer2.frame=CGRectMake(0, self.bottomView.bounds.origin.y+1.7f, self.bottomView.bounds.size.width, 0.3f);
+        self.imprintLayer2.backgroundColor=[UIColor blackColor].CGColor;
+        self.imprintLayer2.opacity=0.03f;
 }
--(CALayer*)imprintLayer1{
-    if (!_imprintLayer1) {
-        _imprintLayer1=[CALayer layer];
-        _imprintLayer1.frame=CGRectMake(0, self.bottomView.bounds.origin.y+0.6f, self.bottomView.bounds.size.width, 0.3f);
-        _imprintLayer1.backgroundColor=[UIColor blackColor].CGColor;
-        _imprintLayer1.opacity=0.06f;
-        
-    }
-    return _imprintLayer1;
+-(void)setupImprintLayer1{
+        self.imprintLayer1=[CALayer layer];
+        self.imprintLayer1.frame=CGRectMake(0, self.bottomView.bounds.origin.y+0.6f, self.bottomView.bounds.size.width, 0.3f);
+        self.imprintLayer1.backgroundColor=[UIColor blackColor].CGColor;
+        self.imprintLayer1.opacity=0.06f;
 }
--(CAGradientLayer*)bottomShadowLayer{
-    if (!_bottomShadowLayer) {
+-(void)setupBottomShadowLayer{
         _bottomShadowLayer = [CAGradientLayer layer];
         _bottomShadowLayer.frame = self.bottomView.bounds;
         _bottomShadowLayer.colors = @[(id)[UIColor blackColor].CGColor, (id)[UIColor clearColor].CGColor];
     }
-    return _bottomShadowLayer;
+-(void)setupTopShadowLayer{
+        self.topShadowLayer = [CAGradientLayer layer];
+        self.topShadowLayer.frame = self.topView.bounds;
+        self.topShadowLayer.colors = @[(id)[UIColor clearColor].CGColor, (id)[UIColor blackColor].CGColor];
+    
 }
--(CAGradientLayer*)topShadowLayer{
-    if (!_topShadowLayer) {
-        _topShadowLayer = [CAGradientLayer layer];
-        _topShadowLayer.frame = self.topView.bounds;
-        _topShadowLayer.colors = @[(id)[UIColor clearColor].CGColor, (id)[UIColor blackColor].CGColor];
-    }
-    return _topShadowLayer;
+-(void)setupAvatarLayer{
+            self.avatarLayer=[CALayer layer];
+            self.avatarLayer.contentsScale=[UIScreen mainScreen].scale;
+            self.avatarLayer.contents=(__bridge id)[UIImage mdQRCodeForString:@"1HN1337CTXSBu3vf9fbFWV7k8PvjXLxxpr" size:100.0f fillColor:[UIColor whiteColor]].CGImage;
+            self.avatarLayer.frame=CGRectMake((self.backImageLayer.bounds.size.width/2.0f)-50.0f, self.backBottomTextLayer.bounds.origin.y+self.backBottomTextLayer.bounds.size.height+60.0f, 100.0f, 100.0f);
+            CATransform3D  rot2 = CATransform3DMakeRotation(M_PI, -1.0f, 0.f, 0.f);
+            self.avatarLayer.transform=rot2;
+            self.avatarLayer.masksToBounds=YES;
 }
--(CALayer*)avatarLayer{
-    if (!_avatarLayer) {
-        _avatarLayer=[CALayer layer];
-        _avatarLayer.contentsScale=[UIScreen mainScreen].scale;
-        _avatarLayer.contents=(__bridge id)[UIImage imageNamed:@"avatar"].CGImage;
-        _avatarLayer.frame=CGRectMake(self.backImageLayer.bounds.size.width-115.0f, self.backImageLayer.bounds.size.height-115.0f, 100.0f, 100.0f);
-        CATransform3D  rot2 = CATransform3DMakeRotation(M_PI, -1.0f, 0.f, 0.f);
-        _avatarLayer.transform=rot2;
-        _avatarLayer.cornerRadius=50.0f;
-        _avatarLayer.borderWidth=0.5f;
-        _avatarLayer.borderColor=[UIColor whiteColor].CGColor;
-        _avatarLayer.masksToBounds=YES;
-    }
-    return _avatarLayer;
+-(void)setupBackTextLayer{
+        NSString *text = @"Please help support this app by donating & leaving a review";
+        UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0f];
+        CGRect textSize = [text boundingRectWithSize:CGSizeMake(self.backImageLayer.bounds.size.width-30, self.backImageLayer.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0] } context:nil];
+        self.backTextLayer=[CATextLayer layer];
+        self.backTextLayer.opacity=0.0;
+        self.backTextLayer.frame=CGRectMake((self.backImageLayer.bounds.size.width/2)-(textSize.size.width/2), self.backImageLayer.bounds.size.height - textSize.size.height- 15.0f, textSize.size.width,textSize.size.height);
+        self.backTextLayer.backgroundColor=[UIColor blackColor].CGColor;
+        self.backTextLayer.opaque=YES;
+        self.backTextLayer.foregroundColor=[UIColor whiteColor].CGColor;
+        self.backTextLayer.alignmentMode = kCAAlignmentCenter;
+        self.backTextLayer.wrapped=YES;
+        self.backTextLayer.contentsScale=[[UIScreen mainScreen] scale];
+        self.backTextLayer.allowsEdgeAntialiasing=YES;
+        CFStringRef fontName = (__bridge CFStringRef)font.fontName;
+        CGFontRef fontRef = CGFontCreateWithFontName(fontName);
+        self.backTextLayer.font = fontRef;
+        self.backTextLayer.fontSize = font.pointSize;
+        CGFontRelease(fontRef);
+        CATransform3D  rot = CATransform3DMakeRotation(M_PI, 1, 0, 0);
+        self.backTextLayer.transform=rot;
+        self.backTextLayer.string = text;
 }
--(CALayer*)backImageLayer{
-    if (!_backImageLayer) {
-        _backImageLayer=[CALayer layer];
-        _backImageLayer.frame=self.topView.bounds;
-        _backImageLayer.backgroundColor=[UIColor blackColor].CGColor;
-        _backImageLayer.opaque=YES;
-    }
-    return _backImageLayer;
+-(void)setupBackBottomTextLayer{
+         NSString *text = @"@HakkaNews";
+        UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0f];
+        CGRect textSize = [text boundingRectWithSize:CGSizeMake(self.backImageLayer.bounds.size.width-30, self.backImageLayer.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName : font } context:nil];
+        self.backBottomTextLayer=[CATextLayer layer];
+        self.backBottomTextLayer.opacity=0.0;
+        self.backBottomTextLayer.frame=CGRectMake(20, 20, textSize.size.width,textSize.size.height);
+        self.backBottomTextLayer.backgroundColor=[UIColor clearColor].CGColor;
+        self.backBottomTextLayer.opaque=NO;
+        self.backBottomTextLayer.foregroundColor=[UIColor crimsonColor].CGColor;
+        self.backBottomTextLayer.alignmentMode = kCAAlignmentCenter;
+        self.backBottomTextLayer.wrapped=YES;
+        self.backBottomTextLayer.contentsScale=[[UIScreen mainScreen] scale];
+        self.backBottomTextLayer.allowsEdgeAntialiasing=YES;
+        
+        CFStringRef fontName = (__bridge CFStringRef)font.fontName;
+        CGFontRef fontRef = CGFontCreateWithFontName(fontName);
+        self.backBottomTextLayer.font = fontRef;
+        self.backBottomTextLayer.fontSize = font.pointSize;
+        CGFontRelease(fontRef);
+        CATransform3D  rot = CATransform3DMakeRotation(M_PI, 1, 0, 0);
+        self.backBottomTextLayer.transform=rot;
+        self.backBottomTextLayer.string = text;
+}
+-(void)setupBackImageLayer{
+        self.backImageLayer=[CALayer layer];
+        self.backImageLayer.frame=self.topView.bounds;
+        self.backImageLayer.backgroundColor=[UIColor blackColor].CGColor;
+        self.backImageLayer.contents=(__bridge id)[UIImage imageNamed:@"ad"].CGImage;
+        self.backImageLayer.opaque=YES;
 }
 /*-(CAGradientLayer*)backGradientLayer{
     if (!_backGradientLayer) {
@@ -747,18 +789,18 @@ typedef void(^myCompletion)(BOOL);
     //Displaying the last cell, so we will load more stories
     if(indexPath.row == [self.currentPosts count] - 1){
            if (self.limitReached==NO) {
-           if (!self.postType==4){
+           if (self.postType!=4){
                //loading more stories
-               //start loading animation
+               [self turnOnShimmeringLayer];
         [[HNManager sharedManager] loadPostsWithUrlAddition:[[HNManager sharedManager] postUrlAddition] completion:^(NSArray *posts, NSString *urlAddition) {
             if (posts) {
                 [self.currentPosts addObjectsFromArray:posts];
                 [self.tableView reloadData];
-                //stop loading animation
+                [self turnOffShimmeringLayer];
                 if ([posts count]==0) {
                     self.limitReached=YES;
-                    //no mo story
-                    //stop loading animation
+                    //no more story
+                    [self turnOnShimmeringLayer];
 
                 }
             }
@@ -775,6 +817,9 @@ typedef void(^myCompletion)(BOOL);
                          forKey:kCATransactionDisableActions];
         self.backGradientLayer.opacity = 0.3f;
         self.backImageLayer.opacity=1.0f;
+        self.backBottomTextLayer.opacity=1.0f;
+        self.backTextLayer.opacity=1.0f;
+        self.avatarLayer.opacity=1.0f;
         self.bottomShadowLayer.opacity = 0.5f;
         self.topShadowLayer.opacity = 0.5f;
         [CATransaction commit];
@@ -785,6 +830,9 @@ typedef void(^myCompletion)(BOOL);
      forKey:kCATransactionDisableActions];
         self.backGradientLayer.opacity = 0.0f;
      self.backImageLayer.opacity=0.0f;
+        self.backTextLayer.opacity=0.0f;
+        self.backBottomTextLayer.opacity=0.0f;
+        self.avatarLayer.opacity=0.0f;
      self.bottomShadowLayer.opacity = angle/180.0f;
      self.topShadowLayer.opacity = angle/180.0f;
      [CATransaction commit];

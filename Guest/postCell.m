@@ -65,7 +65,7 @@
     if (!_actionButton) {
         _actionButton=[[UIButton alloc] init];
         
-        UIImageView *actionBackgroundImageView=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"action"] highlightedImage:[UIImage imageNamed: @"actionHighlighted"]];
+        UIImageView *actionBackgroundImageView=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"action"]];
         actionBackgroundImageView.frame=CGRectMake(9.5f, 9.5f, 25, 25);
         [_actionButton addSubview:actionBackgroundImageView];
         [self.contentView addSubview:_actionButton];
