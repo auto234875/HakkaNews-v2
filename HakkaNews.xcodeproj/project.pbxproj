@@ -71,11 +71,11 @@
 		5274945E1AAECE6700C57690 /* split.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = split.h; sourceTree = "<group>"; };
 		5274945F1AAECE6700C57690 /* UIImage+MDQRCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+MDQRCode.h"; sourceTree = "<group>"; };
 		527494601AAECE6700C57690 /* UIImage+MDQRCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MDQRCode.m"; sourceTree = "<group>"; };
-		52EE4D551A2F9733004A6C09 /* Hakka News.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hakka News.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		52EE4D551A2F9733004A6C09 /* HakkaNews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HakkaNews.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52EE4D591A2F9733004A6C09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		52EE4D5A1A2F9733004A6C09 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		52EE4D651A2F9733004A6C09 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		52EE4D6E1A2F9733004A6C09 /* Hakka NewsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Hakka NewsTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		52EE4D6E1A2F9733004A6C09 /* HakkaNewsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HakkaNewsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		52EE4D731A2F9733004A6C09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		52EE4D741A2F9733004A6C09 /* GuestTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GuestTests.m; sourceTree = "<group>"; };
 		52EE4D7E1A2F97EF004A6C09 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -195,8 +195,8 @@
 		52EE4D561A2F9733004A6C09 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				52EE4D551A2F9733004A6C09 /* Hakka News.app */,
-				52EE4D6E1A2F9733004A6C09 /* Hakka NewsTests.xctest */,
+				52EE4D551A2F9733004A6C09 /* HakkaNews.app */,
+				52EE4D6E1A2F9733004A6C09 /* HakkaNewsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -281,9 +281,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		52EE4D541A2F9733004A6C09 /* Hakka News */ = {
+		52EE4D541A2F9733004A6C09 /* HakkaNews */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 52EE4D781A2F9734004A6C09 /* Build configuration list for PBXNativeTarget "Hakka News" */;
+			buildConfigurationList = 52EE4D781A2F9734004A6C09 /* Build configuration list for PBXNativeTarget "HakkaNews" */;
 			buildPhases = (
 				19F140DF979C70749547FD43 /* Check Pods Manifest.lock */,
 				52EE4D511A2F9733004A6C09 /* Sources */,
@@ -295,14 +295,14 @@
 			);
 			dependencies = (
 			);
-			name = "Hakka News";
+			name = HakkaNews;
 			productName = Guest;
-			productReference = 52EE4D551A2F9733004A6C09 /* Hakka News.app */;
+			productReference = 52EE4D551A2F9733004A6C09 /* HakkaNews.app */;
 			productType = "com.apple.product-type.application";
 		};
-		52EE4D6D1A2F9733004A6C09 /* Hakka NewsTests */ = {
+		52EE4D6D1A2F9733004A6C09 /* HakkaNewsTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 52EE4D7B1A2F9734004A6C09 /* Build configuration list for PBXNativeTarget "Hakka NewsTests" */;
+			buildConfigurationList = 52EE4D7B1A2F9734004A6C09 /* Build configuration list for PBXNativeTarget "HakkaNewsTests" */;
 			buildPhases = (
 				52EE4D6A1A2F9733004A6C09 /* Sources */,
 				52EE4D6B1A2F9733004A6C09 /* Frameworks */,
@@ -313,9 +313,9 @@
 			dependencies = (
 				52EE4D701A2F9733004A6C09 /* PBXTargetDependency */,
 			);
-			name = "Hakka NewsTests";
+			name = HakkaNewsTests;
 			productName = GuestTests;
-			productReference = 52EE4D6E1A2F9733004A6C09 /* Hakka NewsTests.xctest */;
+			productReference = 52EE4D6E1A2F9733004A6C09 /* HakkaNewsTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -337,7 +337,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 52EE4D501A2F9733004A6C09 /* Build configuration list for PBXProject "Hakka News" */;
+			buildConfigurationList = 52EE4D501A2F9733004A6C09 /* Build configuration list for PBXProject "HakkaNews" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -350,8 +350,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				52EE4D541A2F9733004A6C09 /* Hakka News */,
-				52EE4D6D1A2F9733004A6C09 /* Hakka NewsTests */,
+				52EE4D541A2F9733004A6C09 /* HakkaNews */,
+				52EE4D6D1A2F9733004A6C09 /* HakkaNewsTests */,
 			);
 		};
 /* End PBXProject section */
@@ -452,7 +452,7 @@
 /* Begin PBXTargetDependency section */
 		52EE4D701A2F9733004A6C09 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 52EE4D541A2F9733004A6C09 /* Hakka News */;
+			target = 52EE4D541A2F9733004A6C09 /* HakkaNews */;
 			targetProxy = 52EE4D6F1A2F9733004A6C09 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -543,7 +543,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Guest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "Hakka News";
+				PRODUCT_NAME = HakkaNews;
 				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
@@ -557,7 +557,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Guest/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "Hakka News";
+				PRODUCT_NAME = HakkaNews;
 				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
@@ -576,7 +576,7 @@
 				);
 				INFOPLIST_FILE = GuestTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "Hakka NewsTests";
+				PRODUCT_NAME = HakkaNewsTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Guest.app/Guest";
 			};
 			name = Debug;
@@ -591,7 +591,7 @@
 				);
 				INFOPLIST_FILE = GuestTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "Hakka NewsTests";
+				PRODUCT_NAME = HakkaNewsTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Guest.app/Guest";
 			};
 			name = Release;
@@ -599,7 +599,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		52EE4D501A2F9733004A6C09 /* Build configuration list for PBXProject "Hakka News" */ = {
+		52EE4D501A2F9733004A6C09 /* Build configuration list for PBXProject "HakkaNews" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				52EE4D761A2F9734004A6C09 /* Debug */,
@@ -608,7 +608,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		52EE4D781A2F9734004A6C09 /* Build configuration list for PBXNativeTarget "Hakka News" */ = {
+		52EE4D781A2F9734004A6C09 /* Build configuration list for PBXNativeTarget "HakkaNews" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				52EE4D791A2F9734004A6C09 /* Debug */,
@@ -617,7 +617,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		52EE4D7B1A2F9734004A6C09 /* Build configuration list for PBXNativeTarget "Hakka NewsTests" */ = {
+		52EE4D7B1A2F9734004A6C09 /* Build configuration list for PBXNativeTarget "HakkaNewsTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				52EE4D7C1A2F9734004A6C09 /* Debug */,
