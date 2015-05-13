@@ -140,7 +140,7 @@
 }
 -(UITableView*)tableView{
     if (!_tableView) {
-        _tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-44) style:UITableViewStylePlain];
+        _tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 49, self.view.bounds.size.width, self.view.bounds.size.height-44-49) style:UITableViewStylePlain];
         _tableView.delegate=self;
         _tableView.dataSource=self;
         _tableView.tag=tableViewTag;
@@ -226,17 +226,22 @@
     self.loadingLayer.shimmeringSpeed=300;
     self.loadingLayer.shimmeringPauseDuration=0.1;
     [self createTabBarButtons];
-    [self getStories];
-    //UIButton *loginButton=[[UIButton alloc] initWithFrame:CGRectMake(15, 15, 44, 44)];
-    //[loginButton setBackgroundImage:[UIImage imageNamed:@"action" ] forState:UIControlStateNormal];
-    //[loginButton addTarget:self action:@selector(showLogin) forControlEvents:UIControlEventTouchUpInside];
-    //[self.view addSubview:loginButton];
+    UIImageView *adImageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, 5, self.view.bounds.size.width, 44)];
+    adImageView.contentMode=UIViewContentModeScaleAspectFit;
+    UIImage *adImage=[UIImage imageNamed:@"test"];
+    adImageView.image=adImage;
+    [self.view addSubview:adImageView];
+    //[self getStories];
     CALayer *layer=[CALayer layer];
     layer.frame=self.loadingLayer.bounds;
     layer.backgroundColor=[UIColor turquoiseColor].CGColor;
     self.loadingLayer.contentLayer=layer;
     self.loadingLayer.shimmering=YES;
     [self.view.layer addSublayer:self.loadingLayer];
+}
+
+-(void)setupAd{
+    
 }
 -(void)showLogin{
     LoginVC *login=[[LoginVC alloc] init];

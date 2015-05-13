@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		521E2C531AAD0BF0006CC0B6 /* Inconsolata.otf in Resources */ = {isa = PBXBuildFile; fileRef = 521E2C521AAD0BF0006CC0B6 /* Inconsolata.otf */; };
+		52349B821AFD0E69009E3DBF /* ad.json in Resources */ = {isa = PBXBuildFile; fileRef = 52349B811AFD0E69009E3DBF /* ad.json */; };
 		527494611AAECE6700C57690 /* bitstream.c in Sources */ = {isa = PBXBuildFile; fileRef = 527494511AAECE6700C57690 /* bitstream.c */; };
 		527494621AAECE6700C57690 /* mask.c in Sources */ = {isa = PBXBuildFile; fileRef = 527494531AAECE6700C57690 /* mask.c */; };
 		527494631AAECE6700C57690 /* qrencode.c in Sources */ = {isa = PBXBuildFile; fileRef = 527494551AAECE6700C57690 /* qrencode.c */; };
@@ -55,6 +56,7 @@
 /* Begin PBXFileReference section */
 		1A062B5F61AB0AC6DF2D73B2 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		521E2C521AAD0BF0006CC0B6 /* Inconsolata.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Inconsolata.otf; sourceTree = "<group>"; };
+		52349B811AFD0E69009E3DBF /* ad.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ad.json; sourceTree = "<group>"; };
 		527494511AAECE6700C57690 /* bitstream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bitstream.c; sourceTree = "<group>"; };
 		527494521AAECE6700C57690 /* bitstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bitstream.h; sourceTree = "<group>"; };
 		527494531AAECE6700C57690 /* mask.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mask.c; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 			children = (
 				52EE4DAE1A2F9D6F004A6C09 /* topStoriesViewController.h */,
 				52EE4DAF1A2F9D6F004A6C09 /* topStoriesViewController.m */,
+				52349B811AFD0E69009E3DBF /* ad.json */,
 				5274944F1AAECE6600C57690 /* QR */,
 				52EE4DAB1A2F9D63004A6C09 /* CommentsViewController.h */,
 				52EE4DAC1A2F9D63004A6C09 /* CommentsViewController.m */,
@@ -361,6 +364,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52349B821AFD0E69009E3DBF /* ad.json in Resources */,
 				52EE4D661A2F9733004A6C09 /* Images.xcassets in Resources */,
 				52EE4DB21A2F9D85004A6C09 /* Launch Screen.xib in Resources */,
 				521E2C531AAD0BF0006CC0B6 /* Inconsolata.otf in Resources */,
