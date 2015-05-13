@@ -19,7 +19,9 @@
 #import "UIImage+MDQRCode.h"
 #import "TUSafariActivity.h"
 @interface topStoriesViewController () <UIGestureRecognizerDelegate,POPAnimationDelegate,UIScrollViewDelegate,UIActionSheetDelegate,UITableViewDataSource,UITableViewDelegate,FoldingViewDelegate>
-@property (nonatomic, strong) NSMutableArray *readPost;
+
+@property(nonatomic)NSUInteger adHeight;
+@property(nonatomic, strong) NSMutableArray *readPost;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 @property(nonatomic)BOOL userIsLoggedIn;
 @property (nonatomic, strong)NSIndexPath *upvoteIndexPath;
@@ -49,6 +51,9 @@
 @property(nonatomic,strong)CATextLayer *backBottomTextLayer;
 @end
 @implementation topStoriesViewController
+
+#define kpostTitleFontSize 14
+#define kLoadingLayerHeight 5
 #define postTitlePadding 15
 #define tableViewTag 23
 #define kButtonHeight 44
@@ -140,7 +145,7 @@
 }
 -(UITableView*)tableView{
     if (!_tableView) {
-        _tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, 49, self.view.bounds.size.width, self.view.bounds.size.height-44-49) style:UITableViewStylePlain];
+        _tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, kLoadingLayerHeight+self.adHeight, self.view.bounds.size.width, self.view.bounds.size.height-kButtonHeight-kLoadingLayerHeight-self.adHeight) style:UITableViewStylePlain];
         _tableView.delegate=self;
         _tableView.dataSource=self;
         _tableView.tag=tableViewTag;
@@ -151,8 +156,8 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     HNPost *post=[self.currentPosts objectAtIndex:indexPath.row];
     if ([self.readPost containsObject:post.PostId]) {
-        UIFont   *textFont    = [UIFont fontWithName:@"AvenirNext-Regular" size:14];
-        CGFloat cellWidth= self.tableView.frame.size.width-30;
+        UIFont   *textFont    = [UIFont fontWithName:@"AvenirNext-Regular" size:kpostTitleFontSize];
+        CGFloat cellWidth= self.tableView.frame.size.width-(postTitlePadding*2);
         CGSize boundingSize = CGSizeMake(cellWidth, CGFLOAT_MAX);
         CGSize textSize = [post.Title boundingRectWithSize:boundingSize
                                                    options:NSStringDrawingUsesLineFragmentOrigin
@@ -161,8 +166,8 @@
         return textSize.height+44+postTitlePadding*2;
     }
     else{
-        UIFont   *textFont    = [UIFont fontWithName:@"AvenirNext-DemiBold" size:14];
-        CGFloat cellWidth= self.tableView.frame.size.width-30;
+        UIFont   *textFont    = [UIFont fontWithName:@"AvenirNext-DemiBold" size:kpostTitleFontSize];
+        CGFloat cellWidth= self.tableView.frame.size.width-(postTitlePadding*2);
         CGSize boundingSize = CGSizeMake(cellWidth, CGFLOAT_MAX);
         CGSize textSize = [post.Title boundingRectWithSize:boundingSize
                                                    options:NSStringDrawingUsesLineFragmentOrigin
@@ -216,21 +221,17 @@
     [self retrieveListofReadPost];
     [self retrieveListofUpvote];
     self.postType=0;
+    [self setupAd];
     self.tableView.backgroundColor=[UIColor snowColor];
     self.tableView.delaysContentTouches=NO;
     self.limitReached=NO;
     self.tableView.tag=1;
     self.loadingLayer=[FBShimmeringLayer layer];
-    self.loadingLayer.frame=CGRectMake(0,0, self.view.bounds.size.width, 5);
+    self.loadingLayer.frame=CGRectMake(0,0, self.view.bounds.size.width, kLoadingLayerHeight);
     self.loadingLayer.shimmeringOpacity=0.1f;
     self.loadingLayer.shimmeringSpeed=300;
     self.loadingLayer.shimmeringPauseDuration=0.1;
     [self createTabBarButtons];
-    UIImageView *adImageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, 5, self.view.bounds.size.width, 44)];
-    adImageView.contentMode=UIViewContentModeScaleAspectFit;
-    UIImage *adImage=[UIImage imageNamed:@"test"];
-    adImageView.image=adImage;
-    [self.view addSubview:adImageView];
     //[self getStories];
     CALayer *layer=[CALayer layer];
     layer.frame=self.loadingLayer.bounds;
@@ -241,7 +242,23 @@
 }
 
 -(void)setupAd{
+    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"https://raw.githubusercontent.com/auto234875/HakkaNews-v2/master/Guest/ad.json"]];
+    NSDictionary *command = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
     
+    if ([command[@"Status"] isEqualToString:@"0"]) {
+        self.adHeight = 0;
+        return;
+    }
+    
+    else{
+        self.adHeight = 44;
+         UIImageView *adImageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, kLoadingLayerHeight, self.view.bounds.size.width, self.adHeight)];
+         adImageView.contentMode=UIViewContentModeScaleAspectFit;
+        NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:command[@"URL"]]];
+        UIImage *adImage=[UIImage imageWithData:imageData];
+         adImageView.image=adImage;
+         [self.view addSubview:adImageView];
+    }
 }
 -(void)showLogin{
     LoginVC *login=[[LoginVC alloc] init];
@@ -364,7 +381,7 @@
     cell.postTitle.highlightedTextColor = [UIColor turquoiseColor];
     cell.contentView.backgroundColor=[UIColor snowColor];
     if ([self.readPost containsObject:post.PostId]) {
-        UIFont   *textFont    = [UIFont fontWithName:@"AvenirNext-Regular" size:14];
+        UIFont   *textFont    = [UIFont fontWithName:@"AvenirNext-Regular" size:kpostTitleFontSize];
         CGFloat cellWidth= self.tableView.frame.size.width-postTitlePadding*2;
         CGSize boundingSize = CGSizeMake(cellWidth, CGFLOAT_MAX);
         CGSize textSize = [post.Title boundingRectWithSize:boundingSize
@@ -374,7 +391,7 @@
         cell.postTitle.frame=CGRectMake(15, 15, textSize.width, textSize.height);
     }
     else{
-        UIFont   *textFont    = [UIFont fontWithName:@"AvenirNext-DemiBold" size:14];
+        UIFont   *textFont    = [UIFont fontWithName:@"AvenirNext-DemiBold" size:kpostTitleFontSize];
         CGFloat cellWidth= self.tableView.frame.size.width-postTitlePadding*2;
         CGSize boundingSize = CGSizeMake(cellWidth, CGFLOAT_MAX);
         CGSize textSize = [post.Title boundingRectWithSize:boundingSize
