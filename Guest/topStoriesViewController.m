@@ -252,7 +252,7 @@
     }
     
     else{
-        self.adHeight = 44;
+        self.adHeight = 49;
          UIImageView *adImageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.adHeight)];
          adImageView.contentMode=UIViewContentModeScaleAspectFit;
         NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:command[@"URL"]]];
