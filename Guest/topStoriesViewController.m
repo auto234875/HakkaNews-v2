@@ -222,6 +222,7 @@
     [self retrieveListofUpvote];
     self.postType=0;
     [self setupAd];
+    self.view.backgroundColor = [UIColor purpleColor];
     self.tableView.backgroundColor=[UIColor snowColor];
     self.tableView.delaysContentTouches=NO;
     self.limitReached=NO;
@@ -244,15 +245,15 @@
 -(void)setupAd{
     NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"https://raw.githubusercontent.com/auto234875/HakkaNews-v2/master/Guest/ad.json"]];
     NSDictionary *command = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    self.adHeight = 0;
     
     if ([command[@"Status"] isEqualToString:@"0"]) {
-        self.adHeight = 0;
         return;
     }
     
     else{
         self.adHeight = 44;
-         UIImageView *adImageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, kLoadingLayerHeight, self.view.bounds.size.width, self.adHeight)];
+         UIImageView *adImageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.adHeight)];
          adImageView.contentMode=UIViewContentModeScaleAspectFit;
         NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:command[@"URL"]]];
         UIImage *adImage=[UIImage imageWithData:imageData];
