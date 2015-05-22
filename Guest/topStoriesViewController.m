@@ -16,14 +16,14 @@
 #import "HNManager.h"
 #import <MCFireworksButton.h>
 #import "FoldingTableView.h"
-#import "UIImage+MDQRCode.h"
 #import "TUSafariActivity.h"
 @interface topStoriesViewController () <UIGestureRecognizerDelegate,POPAnimationDelegate,UIScrollViewDelegate,UIActionSheetDelegate,UITableViewDataSource,UITableViewDelegate,FoldingViewDelegate>
 
 @property(nonatomic)NSUInteger adHeight;
+@property(nonatomic,strong)UITapGestureRecognizer *tap;
+@property(nonatomic,strong)UIImageView *adImageView;
 @property(nonatomic, strong) NSMutableArray *readPost;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
-@property(nonatomic)BOOL userIsLoggedIn;
 @property (nonatomic, strong)NSIndexPath *upvoteIndexPath;
 @property(strong, nonatomic)UIActionSheet *as;
 @property(strong,nonatomic)NSMutableArray *upvote;
@@ -145,11 +145,11 @@
 }
 -(UITableView*)tableView{
     if (!_tableView) {
-        _tableView=[[UITableView alloc] initWithFrame:CGRectMake(0, kLoadingLayerHeight+self.adHeight, self.view.bounds.size.width, self.view.bounds.size.height-kButtonHeight-kLoadingLayerHeight-self.adHeight) style:UITableViewStylePlain];
+        _tableView=[[UITableView alloc] init];
         _tableView.delegate=self;
         _tableView.dataSource=self;
         _tableView.tag=tableViewTag;
-       [self.view addSubview:_tableView];
+        [self.view addSubview:_tableView];
     }
     return _tableView;
 }
@@ -178,7 +178,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self.tableView reloadData];
+   // [self.tableView reloadData];
 }
 -(NSMutableArray*)readPost{
     if (!_readPost) {
@@ -195,34 +195,18 @@
 - (void)saveTheListOfReadPost {
     [[NSUserDefaults standardUserDefaults] setObject:self.readPost forKey:@"listOfReadPosts"];
 }
-- (void)saveTheListOfUpvote {
-    [[NSUserDefaults standardUserDefaults] setObject:self.upvote forKey:@"listOfUpvote"];
-}
+
 - (void)retrieveListofReadPost {
     self.readPost= [[[NSUserDefaults standardUserDefaults] objectForKey:@"listOfReadPosts"] mutableCopy];
 }
-- (void)retrieveListofUpvote {
-    self.upvote= [[[NSUserDefaults standardUserDefaults] objectForKey:@"listOfUpvote"] mutableCopy];
-}
-- (void)initialUserSetup {
-    if ([[HNManager sharedManager]userIsLoggedIn]) {
-        self.userIsLoggedIn=YES;
-    }
-    else{
-        self.userIsLoggedIn=NO;
 
-    }
-}
+
 
 -(void)viewDidLoad{
     [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initialUserSetup) name:@"userIsLoggedIn" object:nil];
-    [self initialUserSetup];
     [self retrieveListofReadPost];
-    [self retrieveListofUpvote];
     self.postType=0;
     [self setupAd];
-    self.view.backgroundColor = [UIColor purpleColor];
     self.tableView.backgroundColor=[UIColor snowColor];
     self.tableView.delaysContentTouches=NO;
     self.limitReached=NO;
@@ -233,7 +217,7 @@
     self.loadingLayer.shimmeringSpeed=300;
     self.loadingLayer.shimmeringPauseDuration=0.1;
     [self createTabBarButtons];
-    //[self getStories];
+ //   [self getStories];
     CALayer *layer=[CALayer layer];
     layer.frame=self.loadingLayer.bounds;
     layer.backgroundColor=[UIColor turquoiseColor].CGColor;
@@ -244,38 +228,47 @@
 
 -(void)setupAd{
     NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"https://raw.githubusercontent.com/auto234875/HakkaNews-v2/master/Guest/ad.json"]];
-    NSDictionary *command = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-    self.adHeight = 0;
     
-    if ([command[@"Status"] isEqualToString:@"0"]) {
-        return;
+    if (data) {
+        NSDictionary *command = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        if ([command[@"Status"] isEqualToString:@"0"] || !command) {
+            self.tableView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-kButtonHeight);
+            [self.adImageView removeFromSuperview];
+            return;
+        }
+        else{
+            self.adHeight = 49;
+            
+            self.tableView.frame = CGRectMake(0, self.adHeight, self.view.bounds.size.width, self.view.bounds.size.height-kButtonHeight-self.adHeight);
+            NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:command[@"URL"]]];
+            self.adImageView.image=[UIImage imageWithData:imageData scale:[UIScreen mainScreen].scale];
+            [self.view addSubview:self.adImageView];
+        }
+
     }
     
     else{
-        self.adHeight = 49;
-         UIImageView *adImageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.adHeight)];
-         adImageView.contentMode=UIViewContentModeScaleAspectFit;
-        NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:command[@"URL"]]];
-        UIImage *adImage=[UIImage imageWithData:imageData];
-         adImageView.image=adImage;
-         [self.view addSubview:adImageView];
+        self.tableView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height-kButtonHeight);
+        [self.adImageView removeFromSuperview];
+        return;
     }
 }
--(void)showLogin{
-    LoginVC *login=[[LoginVC alloc] init];
-    [self presentViewController:login animated:YES completion:nil];
+
+-(UIImageView*)adImageView{
+    if (!_adImageView) {
+        _adImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 49)];
+        _adImageView.contentMode=UIViewContentModeScaleAspectFill;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openAffil)];
+        tap.delegate = self;
+        [_adImageView addGestureRecognizer:tap];
+    }
+    return _adImageView;
 }
 
--(void)setupLoggedIn{
-    
-    self.userIsLoggedIn=YES;
-    [self.tableView reloadData];
+-(void)openAffil{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.reddit.com"]];
 }
--(void)setupNotLoggedIn{
-    
-    self.userIsLoggedIn=NO;
-    [self.tableView reloadData];
-}
+
 -(void)turnOffShimmeringLayer{
     self.loadingLayer.shimmering=NO;
     self.loadingLayer.opacity=0.0;
@@ -410,19 +403,7 @@
     [cell.postDetail addTarget:self action:@selector(postDetailButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [cell.postDetail setTitle:[NSString stringWithFormat:@"%i Points  %i Comments", post.Points, post.CommentCount]
                      forState:UIControlStateNormal];
-    if (self.userIsLoggedIn) {
-        if (post.Type == PostTypeDefault || post.Type==PostTypeAskHN) {
 
-    if ([self.upvote containsObject:post.PostId]) {
-        [cell.likeButton setImage:[UIImage imageNamed:@"Like-Blue"] forState:UIControlStateNormal];
-        }
-    else{
-    [cell.likeButton setImage:[UIImage imageNamed:@"Like"] forState:UIControlStateNormal];
-    }
-    cell.likeButton.tag=indexPath.row;
-    [cell.likeButton addTarget:self action:@selector(likeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        }
-    }
     return cell;
 }
 -(void)postDetailButtonPressed:(UIButton*)sender{
@@ -459,27 +440,7 @@
             }
         }];}
 }
--(void)likeButtonPressed:(MCFireworksButton*)sender{
-    HNPost *post=[self.currentPosts objectAtIndex:sender.tag];
-    if ([self.upvote containsObject:post.PostId]) {
-        return;
-    }
-    else{
-        [[HNManager sharedManager] voteOnPostOrComment:post direction:VoteDirectionUp completion:^(BOOL success) {
-        if (success){
-            [self.upvote addObject:post.PostId];
-            [self saveTheListOfUpvote];
-            [sender popOutsideWithDuration:0.5];
-            [sender setImage:[UIImage imageNamed:@"Like-Blue"] forState:UIControlStateNormal];
-            [sender animate];
-        }
-        else {
-            //can't upvote
-            //stop loading animation
-        }
-    }];
-    }
-}
+
 -(void)actionButtonPressed:(UIButton*)sender{
         HNPost *post=[self.currentPosts objectAtIndex:sender.tag];
         TUSafariActivity *openInSafari=[[TUSafariActivity alloc]init];
@@ -661,18 +622,12 @@ typedef void(^myCompletion)(BOOL);
    //Since we are not lazy loading due to unresolved issues, we'll need to be careful about instantiating these layers as some of their properties are codependent
     [self setupTopShadowLayer];
     [self setupBackImageLayer];
-    //[self setupBackTextLayer];
     [self setupBackBottomTextLayer];
-    //[self setupAvatarLayer];
     self.topShadowLayer.opacity=0;
     self.backImageLayer.opacity=1.0f;
-    //self.backGradientLayer.opacity = 0.3f;
    [self.topView addSublayer:self.topShadowLayer];
     [self.topView addSublayer:self.backImageLayer];
-    //[self.backImageLayer addSublayer:self.avatarLayer];
-    //[self.backImageLayer addSublayer:self.backTextLayer];
     [self.backImageLayer addSublayer:self.backBottomTextLayer];
-    //[self.backImageLayer addSublayer:self.backGradientLayer];
     [self.scaleNTranslationLayer addSublayer:self.topView];
 }
 - (void)addBottomView
@@ -721,38 +676,8 @@ typedef void(^myCompletion)(BOOL);
         self.topShadowLayer.colors = @[(id)[UIColor clearColor].CGColor, (id)[UIColor blackColor].CGColor];
     
 }
--(void)setupAvatarLayer{
-            self.avatarLayer=[CALayer layer];
-            self.avatarLayer.contentsScale=[UIScreen mainScreen].scale;
-            self.avatarLayer.contents=(__bridge id)[UIImage mdQRCodeForString:@"1HN1337CTXSBu3vf9fbFWV7k8PvjXLxxpr" size:100.0f fillColor:[UIColor whiteColor]].CGImage;
-            self.avatarLayer.frame=CGRectMake((self.backImageLayer.bounds.size.width/2.0f)-50.0f, self.backBottomTextLayer.bounds.origin.y+self.backBottomTextLayer.bounds.size.height+60.0f, 100.0f, 100.0f);
-            CATransform3D  rot2 = CATransform3DMakeRotation(M_PI, -1.0f, 0.f, 0.f);
-            self.avatarLayer.transform=rot2;
-            self.avatarLayer.masksToBounds=YES;
-}
--(void)setupBackTextLayer{
-        NSString *text = @"Please help support this app by donating & leaving a review";
-        UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0f];
-        CGRect textSize = [text boundingRectWithSize:CGSizeMake(self.backImageLayer.bounds.size.width-30, self.backImageLayer.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0] } context:nil];
-        self.backTextLayer=[CATextLayer layer];
-        self.backTextLayer.opacity=0.0;
-        self.backTextLayer.frame=CGRectMake((self.backImageLayer.bounds.size.width/2)-(textSize.size.width/2), self.backImageLayer.bounds.size.height - textSize.size.height- 15.0f, textSize.size.width,textSize.size.height);
-        self.backTextLayer.backgroundColor=[UIColor blackColor].CGColor;
-        self.backTextLayer.opaque=YES;
-        self.backTextLayer.foregroundColor=[UIColor whiteColor].CGColor;
-        self.backTextLayer.alignmentMode = kCAAlignmentCenter;
-        self.backTextLayer.wrapped=YES;
-        self.backTextLayer.contentsScale=[[UIScreen mainScreen] scale];
-        self.backTextLayer.allowsEdgeAntialiasing=YES;
-        CFStringRef fontName = (__bridge CFStringRef)font.fontName;
-        CGFontRef fontRef = CGFontCreateWithFontName(fontName);
-        self.backTextLayer.font = fontRef;
-        self.backTextLayer.fontSize = font.pointSize;
-        CGFontRelease(fontRef);
-        CATransform3D  rot = CATransform3DMakeRotation(M_PI, 1, 0, 0);
-        self.backTextLayer.transform=rot;
-        self.backTextLayer.string = text;
-}
+
+
 -(void)setupBackBottomTextLayer{
          NSString *text = @"@HakkaNews";
         UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0f];
@@ -784,17 +709,7 @@ typedef void(^myCompletion)(BOOL);
         self.backImageLayer.contents=(__bridge id)[UIImage imageNamed:@"ad"].CGImage;
         self.backImageLayer.opaque=YES;
 }
-/*-(CAGradientLayer*)backGradientLayer{
-    if (!_backGradientLayer) {
-        _backGradientLayer=[CAGradientLayer layer];
-        _backGradientLayer.frame=self.topView.bounds;
-        UIColor *fluorescentColor=[UIColor colorWithRed:141/255.0f green:218/255.0f blue:247/255.0f alpha:0.0f];
-        _backGradientLayer.colors=@[(__bridge id)[UIColor clearColor].CGColor, (__bridge id)fluorescentColor.CGColor,(__bridge id)[UIColor whiteColor].CGColor,(__bridge id)[UIColor whiteColor].CGColor,(__bridge id)fluorescentColor.CGColor,(__bridge id)[UIColor clearColor].CGColor];
-        _backGradientLayer.startPoint=CGPointMake(0, -0.5f);
-        _backGradientLayer.endPoint=CGPointMake(1, 1);
-    }
-    return _backGradientLayer;
-}*/
+
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *) cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([tableView respondsToSelector:@selector(setSeparatorInset:)]) {

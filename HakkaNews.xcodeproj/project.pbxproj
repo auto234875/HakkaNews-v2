@@ -9,14 +9,6 @@
 /* Begin PBXBuildFile section */
 		521E2C531AAD0BF0006CC0B6 /* Inconsolata.otf in Resources */ = {isa = PBXBuildFile; fileRef = 521E2C521AAD0BF0006CC0B6 /* Inconsolata.otf */; };
 		52349B821AFD0E69009E3DBF /* ad.json in Resources */ = {isa = PBXBuildFile; fileRef = 52349B811AFD0E69009E3DBF /* ad.json */; };
-		527494611AAECE6700C57690 /* bitstream.c in Sources */ = {isa = PBXBuildFile; fileRef = 527494511AAECE6700C57690 /* bitstream.c */; };
-		527494621AAECE6700C57690 /* mask.c in Sources */ = {isa = PBXBuildFile; fileRef = 527494531AAECE6700C57690 /* mask.c */; };
-		527494631AAECE6700C57690 /* qrencode.c in Sources */ = {isa = PBXBuildFile; fileRef = 527494551AAECE6700C57690 /* qrencode.c */; };
-		527494641AAECE6700C57690 /* qrinput.c in Sources */ = {isa = PBXBuildFile; fileRef = 527494571AAECE6700C57690 /* qrinput.c */; };
-		527494651AAECE6700C57690 /* qrspec.c in Sources */ = {isa = PBXBuildFile; fileRef = 527494591AAECE6700C57690 /* qrspec.c */; };
-		527494661AAECE6700C57690 /* rscode.c in Sources */ = {isa = PBXBuildFile; fileRef = 5274945B1AAECE6700C57690 /* rscode.c */; };
-		527494671AAECE6700C57690 /* split.c in Sources */ = {isa = PBXBuildFile; fileRef = 5274945D1AAECE6700C57690 /* split.c */; };
-		527494681AAECE6700C57690 /* UIImage+MDQRCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 527494601AAECE6700C57690 /* UIImage+MDQRCode.m */; };
 		52EE4D5B1A2F9733004A6C09 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D5A1A2F9733004A6C09 /* main.m */; };
 		52EE4D661A2F9733004A6C09 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52EE4D651A2F9733004A6C09 /* Images.xcassets */; };
 		52EE4D751A2F9733004A6C09 /* GuestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D741A2F9733004A6C09 /* GuestTests.m */; };
@@ -35,8 +27,6 @@
 		52EE4D9E1A2F9D0D004A6C09 /* LoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D9D1A2F9D0D004A6C09 /* LoginVC.m */; };
 		52EE4DA11A2F9D2E004A6C09 /* postCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4D9F1A2F9D2E004A6C09 /* postCell.m */; };
 		52EE4DA41A2F9D36004A6C09 /* commentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4DA31A2F9D36004A6C09 /* commentCell.m */; };
-		52EE4DA71A2F9D4E004A6C09 /* replyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4DA61A2F9D4E004A6C09 /* replyVC.m */; };
-		52EE4DAA1A2F9D59004A6C09 /* submitVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4DA91A2F9D59004A6C09 /* submitVC.m */; };
 		52EE4DAD1A2F9D63004A6C09 /* CommentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4DAC1A2F9D63004A6C09 /* CommentsViewController.m */; };
 		52EE4DB01A2F9D6F004A6C09 /* topStoriesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EE4DAF1A2F9D6F004A6C09 /* topStoriesViewController.m */; };
 		52EE4DB21A2F9D85004A6C09 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52EE4DB11A2F9D85004A6C09 /* Launch Screen.xib */; };
@@ -57,22 +47,6 @@
 		1A062B5F61AB0AC6DF2D73B2 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		521E2C521AAD0BF0006CC0B6 /* Inconsolata.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Inconsolata.otf; sourceTree = "<group>"; };
 		52349B811AFD0E69009E3DBF /* ad.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ad.json; sourceTree = "<group>"; };
-		527494511AAECE6700C57690 /* bitstream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bitstream.c; sourceTree = "<group>"; };
-		527494521AAECE6700C57690 /* bitstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bitstream.h; sourceTree = "<group>"; };
-		527494531AAECE6700C57690 /* mask.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mask.c; sourceTree = "<group>"; };
-		527494541AAECE6700C57690 /* mask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mask.h; sourceTree = "<group>"; };
-		527494551AAECE6700C57690 /* qrencode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qrencode.c; sourceTree = "<group>"; };
-		527494561AAECE6700C57690 /* qrencode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qrencode.h; sourceTree = "<group>"; };
-		527494571AAECE6700C57690 /* qrinput.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qrinput.c; sourceTree = "<group>"; };
-		527494581AAECE6700C57690 /* qrinput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qrinput.h; sourceTree = "<group>"; };
-		527494591AAECE6700C57690 /* qrspec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qrspec.c; sourceTree = "<group>"; };
-		5274945A1AAECE6700C57690 /* qrspec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qrspec.h; sourceTree = "<group>"; };
-		5274945B1AAECE6700C57690 /* rscode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rscode.c; sourceTree = "<group>"; };
-		5274945C1AAECE6700C57690 /* rscode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rscode.h; sourceTree = "<group>"; };
-		5274945D1AAECE6700C57690 /* split.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = split.c; sourceTree = "<group>"; };
-		5274945E1AAECE6700C57690 /* split.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = split.h; sourceTree = "<group>"; };
-		5274945F1AAECE6700C57690 /* UIImage+MDQRCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+MDQRCode.h"; sourceTree = "<group>"; };
-		527494601AAECE6700C57690 /* UIImage+MDQRCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MDQRCode.m"; sourceTree = "<group>"; };
 		52EE4D551A2F9733004A6C09 /* HakkaNews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HakkaNews.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52EE4D591A2F9733004A6C09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		52EE4D5A1A2F9733004A6C09 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -104,10 +78,6 @@
 		52EE4DA01A2F9D2E004A6C09 /* postCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = postCell.h; sourceTree = "<group>"; };
 		52EE4DA21A2F9D36004A6C09 /* commentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = commentCell.h; sourceTree = "<group>"; };
 		52EE4DA31A2F9D36004A6C09 /* commentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = commentCell.m; sourceTree = "<group>"; };
-		52EE4DA51A2F9D4E004A6C09 /* replyVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = replyVC.h; sourceTree = "<group>"; };
-		52EE4DA61A2F9D4E004A6C09 /* replyVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = replyVC.m; sourceTree = "<group>"; };
-		52EE4DA81A2F9D59004A6C09 /* submitVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = submitVC.h; sourceTree = "<group>"; };
-		52EE4DA91A2F9D59004A6C09 /* submitVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = submitVC.m; sourceTree = "<group>"; };
 		52EE4DAB1A2F9D63004A6C09 /* CommentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentsViewController.h; sourceTree = "<group>"; };
 		52EE4DAC1A2F9D63004A6C09 /* CommentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentsViewController.m; sourceTree = "<group>"; };
 		52EE4DAE1A2F9D6F004A6C09 /* topStoriesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = topStoriesViewController.h; sourceTree = "<group>"; };
@@ -151,37 +121,6 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		5274944F1AAECE6600C57690 /* QR */ = {
-			isa = PBXGroup;
-			children = (
-				527494501AAECE6600C57690 /* libqrencode */,
-				5274945F1AAECE6700C57690 /* UIImage+MDQRCode.h */,
-				527494601AAECE6700C57690 /* UIImage+MDQRCode.m */,
-			);
-			path = QR;
-			sourceTree = "<group>";
-		};
-		527494501AAECE6600C57690 /* libqrencode */ = {
-			isa = PBXGroup;
-			children = (
-				527494511AAECE6700C57690 /* bitstream.c */,
-				527494521AAECE6700C57690 /* bitstream.h */,
-				527494531AAECE6700C57690 /* mask.c */,
-				527494541AAECE6700C57690 /* mask.h */,
-				527494551AAECE6700C57690 /* qrencode.c */,
-				527494561AAECE6700C57690 /* qrencode.h */,
-				527494571AAECE6700C57690 /* qrinput.c */,
-				527494581AAECE6700C57690 /* qrinput.h */,
-				527494591AAECE6700C57690 /* qrspec.c */,
-				5274945A1AAECE6700C57690 /* qrspec.h */,
-				5274945B1AAECE6700C57690 /* rscode.c */,
-				5274945C1AAECE6700C57690 /* rscode.h */,
-				5274945D1AAECE6700C57690 /* split.c */,
-				5274945E1AAECE6700C57690 /* split.h */,
-			);
-			path = libqrencode;
-			sourceTree = "<group>";
-		};
 		52EE4D4C1A2F9733004A6C09 = {
 			isa = PBXGroup;
 			children = (
@@ -209,13 +148,8 @@
 				52EE4DAE1A2F9D6F004A6C09 /* topStoriesViewController.h */,
 				52EE4DAF1A2F9D6F004A6C09 /* topStoriesViewController.m */,
 				52349B811AFD0E69009E3DBF /* ad.json */,
-				5274944F1AAECE6600C57690 /* QR */,
 				52EE4DAB1A2F9D63004A6C09 /* CommentsViewController.h */,
 				52EE4DAC1A2F9D63004A6C09 /* CommentsViewController.m */,
-				52EE4DA81A2F9D59004A6C09 /* submitVC.h */,
-				52EE4DA91A2F9D59004A6C09 /* submitVC.m */,
-				52EE4DA51A2F9D4E004A6C09 /* replyVC.h */,
-				52EE4DA61A2F9D4E004A6C09 /* replyVC.m */,
 				52EE4DA21A2F9D36004A6C09 /* commentCell.h */,
 				52EE4DA31A2F9D36004A6C09 /* commentCell.m */,
 				52EE4D9F1A2F9D2E004A6C09 /* postCell.m */,
@@ -419,25 +353,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				52EE4D801A2F97EF004A6C09 /* AppDelegate.m in Sources */,
-				527494611AAECE6700C57690 /* bitstream.c in Sources */,
-				527494681AAECE6700C57690 /* UIImage+MDQRCode.m in Sources */,
-				52EE4DA71A2F9D4E004A6C09 /* replyVC.m in Sources */,
-				527494621AAECE6700C57690 /* mask.c in Sources */,
 				52EE4D931A2F9C9E004A6C09 /* FoldingWebView.m in Sources */,
-				527494641AAECE6700C57690 /* qrinput.c in Sources */,
 				52EE4DAD1A2F9D63004A6C09 /* CommentsViewController.m in Sources */,
 				52EE4D9B1A2F9CFF004A6C09 /* UIImage+ImageEffects.m in Sources */,
 				52EE4D951A2F9C9E004A6C09 /* FoldingView.m in Sources */,
-				527494631AAECE6700C57690 /* qrencode.c in Sources */,
 				52EE4D5B1A2F9733004A6C09 /* main.m in Sources */,
-				52EE4DAA1A2F9D59004A6C09 /* submitVC.m in Sources */,
-				527494671AAECE6700C57690 /* split.c in Sources */,
 				52EE4DA11A2F9D2E004A6C09 /* postCell.m in Sources */,
-				527494661AAECE6700C57690 /* rscode.c in Sources */,
 				52EE4D981A2F9CF5004A6C09 /* DRPocketActivity.m in Sources */,
 				52EE4D9E1A2F9D0D004A6C09 /* LoginVC.m in Sources */,
 				52EE4D941A2F9C9E004A6C09 /* FoldingTableView.m in Sources */,
-				527494651AAECE6700C57690 /* qrspec.c in Sources */,
 				52EE4DB01A2F9D6F004A6C09 /* topStoriesViewController.m in Sources */,
 				52EE4DA41A2F9D36004A6C09 /* commentCell.m in Sources */,
 			);

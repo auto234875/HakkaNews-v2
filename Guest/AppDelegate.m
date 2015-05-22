@@ -39,5 +39,10 @@
     }
 }
 
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    [self.tvc setupAd];
+}
+
 @end
 

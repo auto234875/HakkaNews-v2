@@ -12,4 +12,5 @@
 @property(nonatomic)BOOL reloadStories;
 @property(nonatomic)BOOL limitReached;
 -(void)getStories;
+-(void)setupAd;
 @end

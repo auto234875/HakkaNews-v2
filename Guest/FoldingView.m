@@ -11,7 +11,6 @@
 #import <Colours/Colours.h>
 #import "UIImage+ImageEffects.h"
 #import <FBShimmeringLayer.h>
-#import "UIImage+MDQRCode.h"
 
 typedef NS_ENUM(NSInteger, LayerSection) {
     LayerSectionTop,
@@ -141,19 +140,7 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     [self.topView addSublayer:self.topShadowLayer];
     [self.scaleNTranslationLayer addSublayer:self.topView];
 }
--(CALayer*)avatarLayer{
-    if (!_avatarLayer) {
-        _avatarLayer=[CALayer layer];
-        _avatarLayer.contentsScale=[UIScreen mainScreen].scale;
-        _avatarLayer.contents=(__bridge id)[UIImage mdQRCodeForString:@"1HN1337CTXSBu3vf9fbFWV7k8PvjXLxxpr" size:100.0f fillColor:[UIColor whiteColor]].CGImage;
-        _avatarLayer.frame=CGRectMake((self.backImageLayer.bounds.size.width/2.0f)-50.0f, self.backBottomTextLayer.bounds.origin.y+self.backBottomTextLayer.bounds.size.height+60.0f, 100.0f, 100.0f);
-        CATransform3D  rot2 = CATransform3DMakeRotation(M_PI, -1.0f, 0.f, 0.f);
-        _avatarLayer.transform=rot2;
-        
-        _avatarLayer.masksToBounds=YES;
-    }
-    return _avatarLayer;
-}
+
 -(CALayer*)backImageLayer{
     if (!_backImageLayer) {
         _backImageLayer=[CALayer layer];
@@ -203,33 +190,7 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     }
     return _backTextLayer;
 }
-/*-(CATextLayer*)backBottomTextLayer{
-    if (!_backBottomTextLayer) {
-        NSString *text = @"1HN1337CTXSBu3vf9fbFWV7k8PvjXLxxpr";
-        UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0f];
-        CGRect textSize = [text boundingRectWithSize:CGSizeMake(self.backImageLayer.bounds.size.width-30, self.backImageLayer.bounds.size.height) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{ NSFontAttributeName : font } context:nil];
-        _backBottomTextLayer=[CATextLayer layer];
-        _backBottomTextLayer.opacity=0.0;
-        _backBottomTextLayer.frame=CGRectMake((self.backImageLayer.bounds.size.width/2)-(textSize.size.width/2), 15.0f, textSize.size.width,textSize.size.height);
-        _backBottomTextLayer.backgroundColor=[UIColor blackColor].CGColor;
-        _backBottomTextLayer.opaque=YES;
-        _backBottomTextLayer.foregroundColor=[UIColor whiteColor].CGColor;
-        _backBottomTextLayer.alignmentMode = kCAAlignmentCenter;
-        _backBottomTextLayer.wrapped=YES;
-        _backBottomTextLayer.contentsScale=[[UIScreen mainScreen] scale];
-        _backBottomTextLayer.allowsEdgeAntialiasing=YES;
-        
-        CFStringRef fontName = (__bridge CFStringRef)font.fontName;
-        CGFontRef fontRef = CGFontCreateWithFontName(fontName);
-        _backBottomTextLayer.font = fontRef;
-        _backBottomTextLayer.fontSize = font.pointSize;
-        CGFontRelease(fontRef);
-        CATransform3D  rot = CATransform3DMakeRotation(M_PI, 1, 0, 0);
-        _backBottomTextLayer.transform=rot;
-        _backBottomTextLayer.string = text;
-    }
-    return _backBottomTextLayer;
-}*/
+
 
 -(CATextLayer*)backBottomTextLayer{
     if (!_backBottomTextLayer) {
@@ -400,7 +361,7 @@ typedef NS_ENUM(NSInteger, LayerSection) {
     POPBasicAnimation *translateAnimation=[POPBasicAnimation animationWithPropertyNamed:kPOPLayerTranslationX];
     CGFloat rotationAngle;
     CGFloat hypotenuse=self.bounds.size.height/2.0f;
-    CGFloat adjacent=fabsf(hypotenuse-verticalPoint);
+    CGFloat adjacent=ABS(hypotenuse-verticalPoint);
     CGFloat nonadjustedAngle= -(acos(adjacent/hypotenuse));
     if (verticalPoint >(self.center.y)){
         rotationAngle=-M_PI-nonadjustedAngle;
